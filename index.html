@@ -6,6 +6,11 @@
 <title>Портфолио — Смирнов Никита</title>
 <style>
 
+ul li {
+  margin-bottom: -75px;
+
+}
+
 @font-face {
   font-family: 'Druk Text Wide';
   src: url('./assets/DrukTextWide-Super.ttf') format('truetype');
@@ -36,8 +41,10 @@
   font-weight: 300 400;
   font-style: normal;
 }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #000; }
+
 .canvas {
   position: relative;
   width: 1280px;
@@ -46,32 +53,145 @@ body { background: #000; }
   overflow: hidden;
   margin: 0 auto;
 }
+
+/* ── Utility ──────────────────────────────────────────── */
+
+.img-bg {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+}
+
+.blur-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.grad-r {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(154,128,86,1) 0%, rgba(154,128,86,0) 100%);
+}
+.grad-l {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(154,128,86,0) 0%, rgba(154,128,86,1) 100%);
+}
+
+.frame-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+}
+
+/* ── Typography ───────────────────────────────────────── */
+
+.t-druk {
+  font-family: 'Druk Text Wide', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  mix-blend-mode: normal;
+  opacity: 1;
+  overflow: hidden;
+  white-space: pre-wrap;
+  color: rgba(255,255,255,1.000);
+}
+
+.t-script {
+  font-family: 'Disruptors Script', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  mix-blend-mode: normal;
+  opacity: 1;
+  overflow: hidden;
+  white-space: pre-wrap;
+  color: rgba(154,128,86,1.000);
+}
+
+.t-stem {
+  font-family: 'Stem', sans-serif;
+  font-style: normal;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  mix-blend-mode: normal;
+  opacity: 1;
+  overflow: hidden;
+  white-space: pre-wrap;
+  color: rgba(255,255,255,1.000);
+}
+
+.work-label {
+  position: absolute;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 13.2px;
+  text-align: center;
+  color: rgba(255,255,255,1.000);
+  overflow: hidden;
+  white-space: pre-wrap;
+  mix-blend-mode: normal;
+  opacity: 1;
+  text-transform: none;
+}
+
+/* ── Work figures ─────────────────────────────────────── */
+
+figure.work {
+  position: absolute;
+  margin: 0;
+}
+
 </style>
 </head>
 <body>
 <div class="canvas">
-<div style="position:absolute;left:29px;top:-574px;width:2979px;height:1852.9991455078125px;">
-  <div style="position:absolute;left:72px;top:727.8231811523438px;width:437px;height:437px;filter:blur(282.5px);background:rgba(159,91,62,0.700);border-radius:50%;"></div>
-  <img src="./assets/1-868.svg" style="position:absolute;left:-175px;top:707px;width:2979px;height:677px;opacity:0.9;" alt="">
-  <div style="position:absolute;left:31px;top:702.9989624023438px;width:743px;height:176.17198181152344px;color:rgba(255,255,255,1.000);font-family:'Druk Text Wide',sans-serif;font-size:78.7759017944336px;font-weight:400;line-height:81.13917541503906px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Смирнов Никита</div>
-  <div style="position:absolute;left:31px;top:884px;width:665px;height:202.2755889892578px;color:rgba(255,255,255,1.000);font-family:'Stem',sans-serif;font-size:32.890262603759766px;font-weight:300;line-height:37.16599655151367px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">- Графический дизайн
-- Оформление соцсетей
-- Векторная графика
-- Фотомонтаж
-- UX/UI</div>
-<img src="./assets/1-876.svg" style="position:absolute;left:590px;top:35px;width:728px;height:1397px;">
-<img src="./assets/1-878.svg" style="position:absolute;left:635.77703857421875px;top: 55px;width:658px;height:1453px;">
-<img src="./assets/1-880.png" style="position:absolute;left:460px;top:610px;width:940px;height:1258px;" alt="">
-<img src="./assets/1-885.png" style="position:absolute;left:630px;top:610px;width:609px;height:910px;" alt="">
-<div style="position:absolute;left:821px;top:930px;width:42px;height:51px;mix-blend-mode:soft-light;filter:blur(50.29999923706055px);background:rgba(255,255,255,1.000);border-radius:50%;"></div>
-<div style="position:absolute;opacity:75%;left:866.9999278699352px;top:888.992919921875px;width:118.05853583146109px;height:287.2525621312327px;mix-blend-mode:overlay;filter:blur(50.29999923706055px);background:rgba(255,255,255,1.000);border-radius:50%;"></div>
-<div style="position:absolute;opacity:75%;left:848.046142578125px;top:800.1358596781502px;width:139.12387755603618px;height:107.86287880765178px;mix-blend-mode:overlay;filter:blur(76.30000305175781px);background:rgba(255,255,255,0.510);border-radius:50%;"></div>
-<div style="position:absolute;left:32px;top:1181px;width:742px;height:306px;color:rgba(255,255,255,1.000);font-family:'Stem',sans-serif;font-size:19px;font-weight:300;line-height:21.469999313354492px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">
+
+  <!-- ═══ HERO + ОБО МНЕ ═══════════════════════════════ -->
+  <header style="position:absolute;left:29px;top:-574px;width:2979px;height:1852.9991455078125px;">
+
+    <div class="blur-circle" style="left:72px;top:727.8231811523438px;width:437px;height:437px;filter:blur(282.5px);background:rgba(159,91,62,0.700);"></div>
+
+    <img src="./assets/1-868.svg" style="position:absolute;left:-175px;top:707px;width:2979px;height:677px;opacity:0.9;" alt="" role="presentation">
+
+    <h1 class="t-druk" style="position:absolute;left:31px;top:702.9989624023438px;width:743px;height:176.17198181152344px;font-size:78.7759017944336px;line-height:81.13917541503906px;text-align:left;">Смирнов Никита</h1>
+
+    <ul class="t-stem" style="position:absolute;left:31px;top:816px;width:665px;height:500px;font-size:32.890262603759766px;font-weight:300;line-height:37.16599655151367px;text-align:left;list-style:none;">
+      <li>- Графический дизайн</li>
+      <li>- Оформление соцсетей</li>
+      <li>- Векторная графика</li>
+      <li>- Фотомонтаж</li>
+      <li>- UX/UI</li>
+    </ul>
+
+    <img src="./assets/1-876.svg" style="position:absolute;left:590px;top:35px;width:728px;height:1397px;" alt="" role="presentation">
+    <img src="./assets/1-878.svg" style="position:absolute;left:635.77703857421875px;top: 55px;width:658px;height:1453px;" alt="" role="presentation">
+    <img src="./assets/1-880.png" style="position:absolute;left:460px;top:610px;width:940px;height:1258px;" alt="Портрет дизайнера Смирнова Никиты">
+    <img src="./assets/1-885.png" style="position:absolute;left:630px;top:610px;width:609px;height:910px;" alt="" role="presentation">
+
+    <div class="blur-circle" style="left:821px;top:930px;width:42px;height:51px;mix-blend-mode:soft-light;filter:blur(50.29999923706055px);background:rgba(255,255,255,1.000);"></div>
+    <div class="blur-circle" style="opacity:0.75;left:866.9999278699352px;top:888.992919921875px;width:118.05853583146109px;height:287.2525621312327px;mix-blend-mode:overlay;filter:blur(50.29999923706055px);background:rgba(255,255,255,1.000);"></div>
+    <div class="blur-circle" style="opacity:0.75;left:848.046142578125px;top:800.1358596781502px;width:139.12387755603618px;height:107.86287880765178px;mix-blend-mode:overlay;filter:blur(76.30000305175781px);background:rgba(255,255,255,0.510);"></div>
+
+    <section aria-label="Обо мне">
+      <h2 class="t-druk" style="position:absolute;left:245px;top:1106px;width:302px;height:37px;font-size:40px;line-height:41.19999694824219px;text-align:left;">ОБО МНЕ</h2>
+      <div aria-hidden="true" class="t-script" style="position:absolute;left:271px;top:1067px;width:249px;height:101px;font-size:128px;line-height:131.83999633789062px;text-align:left;">обо мне</div>
+      <div class="grad-r" style="left:546px;top:1123px;width:195px;"></div>
+      <div class="grad-l" style="left:31px;top:1123px;width:195px;"></div>
+      <p class="t-stem" style="position:absolute;left:32px;top:1181px;width:742px;height:306px;font-size:19px;font-weight:300;line-height:21.469999313354492px;text-align:left;">
     Более 3,5 лет работаю в сфере дизайна, сотрудничал с разными блогерами,
 стримерами и редакциями. Выполнял различного рода задачи, такие как
 превью для видеороликов, дизайн одежды, оформление и ведение
 социальных сетей, логотипы, различную полиграфию и другие
-услуги по дизайну, фото- и видеомонтажу. Сейчас работаю 
+услуги по дизайну, фото- и видеомонтажу. Сейчас работаю
 дизайнером в маркетинговом агенстве Victory Group уже
 год, занимаюсь созданием рекламных материалов.
     Работаю в Photoshop, Illustrator, Figma, AfterEffects,
@@ -79,83 +199,281 @@ PremierePro. Люблю сложные, интересные
 и требующие креативности задачи.
     Отлично справляюсь с работой в  команде:
 работал в связке с копирайтерами, редакторами
-и проджект менеджерами</div>
-<div style="position:absolute;left:245px;top:1106px;width:302px;height:37px;color:rgba(255,255,255,1.000);font-family:'Druk Text Wide',sans-serif;font-size:40px;font-weight:400;line-height:41.19999694824219px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ОБО МНЕ</div>
-<div style="position:absolute;left:271px;top:1067px;width:249px;height:101px;color:rgba(154,128,86,1.000);font-family:'Disruptors Script',sans-serif;font-size:128px;font-weight:400;line-height:131.83999633789062px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">обо мне</div>
-<div style="position:absolute;left:546px;top:1123px;width:195px;height:2px;background:linear-gradient(90deg, rgba(154,128,86,1.000) 0.0%, rgba(154,128,86,0.000) 100.0%);"></div>
-<div style="position:absolute;left:31px;top:1123px;width:195px;height:2px;background:linear-gradient(90deg, rgba(154,128,86,0.000) 0.0%, rgba(154,128,86,1.000) 100.0%);"></div>
-</div>
-<img src="./assets/1-896.svg" style="position:absolute;left:-342.90889447912923px;top:1389.5980224609375px;width:1770px;height:713px;filter:blur(0px);">
-<img src="./assets/1-897.svg" style="position:absolute;left:-511.9999453821365px;top:2447.000105378731px;width:1764px;height:714px;filter:blur(0px);">
-<img src="./assets/1-898.svg" style="position:absolute;left:-401.99983986953157px;top:3676px;width:1721px;height:671px;filter:blur(0px);">
-<img src="./assets/1-899.svg" style="position:absolute;left:-274.9999703798967px;top:4890px;width:1681px;height:831px;filter:blur(0px);">
-<img src="./assets/1-900.svg" style="position:absolute;left:-1225.9999703798967px;top:6238px;width:1681px;height:831px;filter:blur(0px);">
-<div style="position:absolute;left:0px;top:958px;width:1280px;height:64px;">
-<div style="position:absolute;left:0px;top:0px;width:1280px;height:1px;opacity:0.20999999344348907;background:rgba(255,255,255,1.000);"></div>
-<div style="position:absolute;left:873px;top:62px;width:349px;height:2px;background:linear-gradient(90deg, rgba(154,128,86,1.000) 0.0%, rgba(154,128,86,0.000) 100.0%);"></div>
-<div style="position:absolute;left:56px;top:62px;width:349px;height:2px;background:linear-gradient(90deg, rgba(154,128,86,0.000) 0.0%, rgba(154,128,86,1.000) 100.0%);"></div>
-</div>
-<div style="position:absolute;left:425px;top:1003px;width:426px;height:33px;color:rgba(255,255,255,1.000);font-family:'Druk Text Wide',sans-serif;font-size:40px;font-weight:400;line-height:41.19999694824219px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">МОИ РАБОТЫ</div>
-<div style="position:absolute;left:447px;top:961px;width:400px;height:101px;color:rgba(154,128,86,1.000);font-family:'Disruptors Script',sans-serif;font-size:128px;font-weight:400;line-height:131.83999633789062px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">мои работы</div>
-<div style="position:absolute;left:974.9999862562054px;top:113.55111694335938px;width:170.25476069318574px;height:188.1315568428572px;background:rgba(18,19,22,0.010);border-radius:50%;"></div>
-<div style="position:absolute;left:1040.8059763886395px;top:228.14915466308594px;width:121.94684473163397px;height:144.99776872302937px;background:rgba(18,19,22,0.010);border-radius:50%;"></div>
-<div style="position:absolute;left:77px;top:23579px;width:1127px;height:983px;">
-  <div style="position:absolute;left:0px;top:0px;width:1127px;height:633px;background:url('./assets/1-916.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:672px;width:552px;height:311px;background:url('./assets/1-917.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:578px;top:674px;width:549px;height:309px;background:url('./assets/1-918.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:22663px;width:1127px;height:877px;">
-  <div style="position:absolute;left:467px;top:0px;width:660px;height:440px;background:url('./assets/1-920.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:0px;width:440px;height:440px;background:url('./assets/1-921.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:479px;width:398px;height:398px;background:url('./assets/1-922.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:420px;top:479px;width:707px;height:398px;background:url('./assets/1-923.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:21485px;width:1127px;height:1138px;">
-  <div style="position:absolute;left:0px;top:0px;width:711px;height:438px;background:url('./assets/1-925.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:687px;top:478px;width:440px;height:660px;background:url('./assets/1-926.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:478px;width:659px;height:660px;background:url('./assets/1-927.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:749px;top:0px;width:378px;height:438px;background:url('./assets/1-928.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:20147px;width:1127px;height:1299px;">
-  <div style="position:absolute;left:0px;top:0px;width:468px;height:626px;background:url('./assets/1-930.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:665px;width:1127px;height:634px;background:url('./assets/1-931.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:495px;top:0px;width:632px;height:626px;background:url('./assets/1-932.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:19557px;width:1127px;height:551px;border-radius:0px;">
-  <div style="position:absolute;left:346px;top:0px;width:780px;height:326px;background:url('./assets/1-934.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:365px;width:1127px;height:186px;background:url('./assets/1-935.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:0px;width:324px;height:326px;background:url('./assets/1-936.png');background-size:cover;background-position:center;border-radius:401.404052734375px;"></div>
-</div>
-<div style="position:absolute;left:77px;top:18534px;width:1127px;height:985px;">
-  <div style="position:absolute;left:574px;top:673px;width:553px;height:312px;background:url('./assets/1-938.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:673px;width:553px;height:312px;background:url('./assets/1-939.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:0px;width:1127px;height:634px;background:url('./assets/1-940.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:17755px;width:1127px;height:740px;">
-  <div style="position:absolute;left:0px;top:0px;width:554px;height:739px;background:url('./assets/1-942.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:573px;top:0px;width:554px;height:740px;background:url('./assets/1-943.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:16857.671875px;width:1127px;height:859.328125px;">
-  <div style="position:absolute;left:0px;top:0px;width:1127px;height:185.32505798339844px;background:url('./assets/1-945.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:225.328125px;width:1127px;height:634px;background:url('./assets/1-946.png');background-size:cover;background-position:center;"></div>
-</div>
-<div style="position:absolute;left:77px;top:16015px;width:1127px;height:806px;">
-  <div style="position:absolute;left:793px;top:472px;width:334px;height:334px;background:url('./assets/1-948.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:793px;top:0px;width:333.9999694824219px;height:434.9677734375px;background:url('./assets/1-949.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:296.3780517578125px;top:343px;width:462.6219787597656px;height:462.6219787597656px;background:url('./assets/1-950.png');background-size:cover;background-position:center;"></div>
-  <div style="position:absolute;left:0px;top:0px;width:759px;height:303.2667541503906px;">
-    <div style="position:absolute;left:0px;top:0px;width:759px;height:303.2667541503906px;background:url('./assets/1-953.png');background-size:cover;background-position:center;"></div>
-  </div>
-  <img src="./assets/45.png" style="position:absolute;left:0px;top:343px;width:260.3508605957031px;height:462.8459167480469px;background:rgba(255,255,255,1.000);overflow:hidden;">
-  </div><div style="position:absolute;left:77px;top:14535px;width:1127px;height:1444px;"><div style="position:absolute;left:0px;top:0px;width:477px;height:477px;background:url('./assets/1-972.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:525px;top:0px;width:602px;height:600.9584350585938px;background:url('./assets/1-973.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:0px;top:641px;width:1127px;height:803px;"><div style="position:absolute;left:525px;top:0px;width:602px;height:801.7355346679688px;background:url('./assets/1-975.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:0px;top:326px;width:477px;height:477px;background:url('./assets/1-976.png');background-size:cover;background-position:center;"></div></div>
-  <img src="./assets/40.png" style="position:absolute;left:0px;top:514.56640625px;width:232.4965362548828px;height:413.3271789550781px;background:rgba(0,0,0,1.000);overflow:hidden;">
-  <img src="./assets/39.png" style="position:absolute;left:244.50341796875px;top:514px;width:232.4965362548828px;height:413.3271789550781px;background:rgba(0,0,0,1.000);overflow:hidden;">
+и проджект менеджерами</p>
+    </section>
 
-</div><div style="position:absolute;left:45px;top:13817px;width:1195px;height:683px;"><div style="position:absolute;left:31.79351806640625px;top:32.0244140625px;width:292px;height:292px;background:url('./assets/1-1022.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:347.79351806640625px;top:32.0244140625px;width:294px;height:293px;background:url('./assets/1-1023.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:31.79351806640625px;top:343.0244140625px;width:293px;height:294px;background:url('./assets/1-1024.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:347.79351806640625px;top:343.0244140625px;width:294px;height:294px;background:url('./assets/1-1025.png');background-size:cover;background-position:center;"></div><img src="./assets/1-1026.svg" style="position:absolute;left:0px;top:0px;width:676px;height:671px;opacity:0.5;" alt=""><img src="./assets/1-1029.svg" style="position:absolute;left:685px;top:0.037109375px;width:510px;height:671px;opacity:0.5;" alt=""><div style="position:absolute;left:206px;top:662px;width:270px;height:21px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ПЛИТКИ ДЛЯ СОЦ.СЕТЕЙ</div><div style="position:absolute;left:831px;top:662px;width:223px;height:21px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ПРЕВЬЮ ДЛЯ СТОРИС</div><div style="position:absolute;left:717px;top:32px;width:442px;height:605px;background:url('./assets/1-1034.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:43px;top:13418px;width:1197px;height:364px;border-radius:0px;"><div style="position:absolute;left:0px;top:0px;width:1195px;height:358px;opacity:0.5;border-radius:19px;"></div><div style="position:absolute;left:34px;top:30px;width:527px;height:297px;background:url('./assets/1-1038.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:630px;top:29px;width:531px;height:299px;background:url('./assets/1-1039.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:214px;top:349px;width:182px;height:15px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ПРЕВЬЮ ДЛЯ ПОДКАСТА</div><div style="position:absolute;left:727px;top:349px;width:336px;height:15px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ПРЕВЬЮ ДЛЯ ВИДЕОРОЛИКА</div><div style="position:absolute;left:596px;top:29px;width:1px;height:1px;background:transparent;"></div><img src="./assets/1-1043.svg" style="position:absolute;left:0px;top:0px;width:1197px;height:358px;opacity:0.5;" alt=""><img src="./assets/1-1044.svg" style="position:absolute;left:0px;top:0px;width:1197px;height:358px;opacity:0.5;" alt=""></div><div style="position:absolute;left:64px;top:12088px;width:1157px;height:1284px;"><div style="position:absolute;left:0px;top:0px;width:1157px;height:1284px;background:url('./assets/1-1046.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:45px;top:11326px;width:1195px;height:719px;border-radius:0px;"><div style="position:absolute;left:36px;top:33px;width:1123px;height:686px;"><div style="position:absolute;left:346px;top:669px;width:431px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ИСТОРИИ ИНСТАГРАМ</div><div style="position:absolute;left:380px;top:0px;width:361px;height:642px;background:url('./assets/1-1050.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:762px;top:0px;width:361px;height:642px;background:url('./assets/1-1051.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:0px;top:0px;width:361px;height:642px;background:url('./assets/1-1052.png');background-size:cover;background-position:center;"></div></div><img src="./assets/1-1053.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:711px;opacity:0.5;" alt=""></div><div style="position:absolute;left:45px;top:10410px;width:1195px;height:881px;border-radius:0px;"><div style="position:absolute;left:707px;top:34px;width:452px;height:803px;background:url('./assets/1-1055.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:36px;top:34px;width:642px;height:803px;background:url('./assets/1-1056.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:367px;top:860px;width:461px;height:21px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">АФИШИ МЕРОПРИЯТИЙ</div><img src="./assets/1-1058.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:870.0424194335938px;opacity:0.5;" alt=""></div><div style="position:absolute;left:42px;top:9855px;width:1195px;height:520px;border-radius:0px;"><img src="./assets/1-1060.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:512px;opacity:0.5;" alt=""><div style="position:absolute;left:435px;top:503px;width:325px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">БАННЕР ДЛЯ ВКОНТАКТЕ</div><div style="position:absolute;left:37px;top:31px;width:1124px;height:449.1064758300781px;background:url('./assets/1-1062.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:43px;top:8045px;width:1195px;height:1774px;"><div style="position:absolute;left:0px;top:0px;width:1195px;height:1767px;background:url('./assets/1-1064.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:434px;top:1757px;width:325px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ОДЕЖДА</div></div><div style="position:absolute;left:61px;top:7497px;width:1157px;height:508px;"><div style="position:absolute;left:0px;top:0px;width:1157px;height:508px;background:url('./assets/1-1067.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:43px;top:6976px;width:1195px;height:480px;border-radius:0px;"><img src="./assets/1-1069.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:472px;opacity:0.5;" alt=""><div style="position:absolute;left:435px;top:463px;width:325px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">СЕРИЯ ПОСТЕРОВ</div>
-<div style="position:absolute;left:36px;top:32px;width:553px;height:410px;background:url('./assets/1-1071.png');background-size:cover;background-position:center;"></div>
-<div style="position:absolute;left:613px;top:32px;width:547px;height:410px;background:url('./assets/1-1072.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:161px;top:6517px;width:958px;height:411px;"><div style="position:absolute;left:0px;top:0px;width:958px;height:411px;background:url('./assets/1-1074.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:43px;top:5955px;width:1195px;height:514px;border-radius:0px;"><img src="./assets/1-1076.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:506px;opacity:0.5;" alt=""><div style="position:absolute;left:435px;top:497px;width:325px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">РЕКЛАМНЫЕ МАТЕРИАЛЫ ДЛЯ РЕСТОРАНА</div><div style="position:absolute;left:34px;top:30px;width:856px;height:446px;background:url('./assets/1-1078.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:910px;top:30px;width:251px;height:446px;background:url('./assets/1-1079.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:45px;top:5384.9970703125px;width:1195px;height:549px;border-radius:0px;"><img src="./assets/1-1081.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:542px;opacity:0.5;" alt=""><div style="position:absolute;left:485.00006103515625px;top:534px;width:220px;height:15px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ИСТОРИИ ИНСТАГРАМ</div><div style="position:absolute;left:36px;top:32.0029296875px;width:269px;height:478px;background:url('./assets/1-1083.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:322px;top:32.0029296875px;width:269px;height:478px;background:url('./assets/1-1084.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:608px;top:32.0029296875px;width:269px;height:478px;background:url('./assets/1-1085.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:894px;top:32.0029296875px;width:269px;height:478px;background:url('./assets/1-1086.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:91px;top:4696px;width:1100px;height:658px;"><div style="position:absolute;left:718px;top:0px;width:382px;height:638px;"><div style="position:absolute;left:0px;top:0px;width:382px;height:638px;background:url('./assets/1-1089.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:0px;top:0px;width:382px;height:638px;background:url('./assets/1-1090.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:-123.9696255477595px;top:-148px;width:160.2232180389094px;height:503.9254293918275px;filter:blur(63.900001525878906px);background:rgba(18,19,22,1.000);border-radius:50%;"></div></div><div style="position:absolute;left:351px;top:18px;width:385px;height:640px;"><div style="position:absolute;left:0px;top:0px;width:385px;height:640px;background:url('./assets/1-1093.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:0px;top:0px;width:385px;height:640px;background:url('./assets/1-1094.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:-121.50213623046875px;top:186.62992984056473px;width:196.036140563991px;height:501.4848427216166px;filter:blur(63.900001525878906px);background:rgba(18,19,22,1.000);border-radius:50%;"></div></div><div style="position:absolute;left:-7.694883379372186e-7px;top:6px;width:376.00000076948834px;height:635.0000004556341px;background:url('./assets/1-1096.png');background-size:cover;background-position:center;"></div></div>
-<img src="./assets/7.svg" style="position:absolute;left:222.9876708984375px;top:4629.912257554475px;width:843.0247388426214px;height:52.402677652891725px;">
-<div style="position:absolute;left:43px;top:4220px;width:1195px;height:381px;border-radius:0px;"><img src="./assets/1-1101.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:373px;opacity:0.5;" alt=""><div style="position:absolute;left:478px;top:364px;width:239px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ПРЕВЬЮ ДЛЯ ВИДЕОРОЛИКОВ</div><div style="position:absolute;left:609px;top:31px;width:552px;height:311px;background:url('./assets/1-1103.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:34px;top:30px;width:552px;height:311px;background:url('./assets/1-1104.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:61px;top:3504px;width:1157px;height:676px;"><div style="position:absolute;left:0px;top:0px;width:1157px;height:676px;background:url('./assets/1-1106.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:43px;top:2768px;width:1195px;height:707px;border-radius:0px;"><img src="./assets/1-1110.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:699px;opacity:0.5;" alt=""><div style="position:absolute;left:449px;top:690px;width:297px;height:17px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ИСТОРИИ ИНСТАГРАМ</div><div style="position:absolute;left:415px;top:28px;width:363px;height:644px;background:url('./assets/1-1112.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:798px;top:28px;width:363px;height:644px;background:url('./assets/1-1113.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:34px;top:28px;width:363px;height:644px;background:url('./assets/1-1114.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:43px;top:2508px;width:1195px;height:239px;border-radius:0px;"><div style="position:absolute;left:34px;top:22px;width:1127px;height:191px;background:url('./assets/1-1116.png');background-size:cover;background-position:center;"></div><img src="./assets/1-1117.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:233px;opacity:0.5;" alt=""><div style="position:absolute;left:391px;top:224px;width:413px;height:15px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">БАННЕР ДЛЯ YOUTUBE</div></div><div style="position:absolute;left:43px;top:1781px;width:1195px;height:706px;border-radius:0px;"><div style="position:absolute;left:416px;top:30px;width:361.125px;height:642px;background:url('./assets/1-1120.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:34px;top:30px;width:362px;height:643px;background:url('./assets/1-1121.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:799px;top:30px;width:362px;height:643px;background:url('./assets/1-1122.png');background-size:cover;background-position:center;"></div><img src="./assets/1-1123.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:700px;opacity:0.5;" alt=""><div style="position:absolute;left:391px;top:691px;width:413px;height:15px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">СЕРИЯ РЕКЛАМНЫХ INSTAGRAM-СТОРИС</div></div><div style="position:absolute;left:43px;top:1112px;width:1195px;height:648px;border-radius:0px;"><img src="./assets/1-1126.svg" style="position:absolute;left:0px;top:0px;width:1195px;height:642px;opacity:0.5;" alt=""><div style="position:absolute;left:391px;top:633px;width:413px;height:15px;color:rgba(255,255,255,1.000);font-family:'Helvetica',sans-serif;font-size:15px;font-weight:400;line-height:13.199999809265137px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">ШАПКА ПРОФИЛЯ</div><div style="position:absolute;left:34px;top:26px;width:1127px;height:588px;background:url('./assets/1-1128.png');background-size:cover;background-position:center;"></div></div>
+  </header>
+
+  <!-- ═══ ФОНОВЫЕ ДЕКОРАТИВНЫЕ SVG ═════════════════════ -->
+  <img src="./assets/1-896.svg" style="position:absolute;left:-342.90889447912923px;top:1389.5980224609375px;width:1770px;height:713px;filter:blur(0px);" alt="" role="presentation">
+  <img src="./assets/1-897.svg" style="position:absolute;left:-511.9999453821365px;top:2447.000105378731px;width:1764px;height:714px;filter:blur(0px);" alt="" role="presentation">
+  <img src="./assets/1-898.svg" style="position:absolute;left:-401.99983986953157px;top:3676px;width:1721px;height:671px;filter:blur(0px);" alt="" role="presentation">
+  <img src="./assets/1-899.svg" style="position:absolute;left:-274.9999703798967px;top:4890px;width:1681px;height:831px;filter:blur(0px);" alt="" role="presentation">
+  <img src="./assets/1-900.svg" style="position:absolute;left:-1225.9999703798967px;top:6238px;width:1681px;height:831px;filter:blur(0px);" alt="" role="presentation">
+
+  <!-- ═══ РАЗДЕЛИТЕЛЬ + ЗАГОЛОВОК «МОИ РАБОТЫ» ═════════ -->
+  <div role="presentation" style="position:absolute;left:0px;top:958px;width:1280px;height:64px;">
+    <div style="position:absolute;left:0px;top:0px;width:1280px;height:1px;opacity:0.20999999344348907;background:rgba(255,255,255,1.000);"></div>
+    <div class="grad-r" style="left:873px;top:62px;width:349px;"></div>
+    <div class="grad-l" style="left:56px;top:62px;width:349px;"></div>
+  </div>
+
+  <h2 class="t-druk" style="position:absolute;left:425px;top:1003px;width:426px;height:33px;font-size:40px;line-height:41.19999694824219px;text-align:left;">МОИ РАБОТЫ</h2>
+  <div aria-hidden="true" class="t-script" style="position:absolute;left:447px;top:961px;width:400px;height:101px;font-size:128px;line-height:131.83999633789062px;text-align:left;">мои работы</div>
+
+  <div style="position:absolute;left:974.9999862562054px;top:113.55111694335938px;width:170.25476069318574px;height:188.1315568428572px;background:rgba(18,19,22,0.010);border-radius:50%;"></div>
+  <div style="position:absolute;left:1040.8059763886395px;top:228.14915466308594px;width:121.94684473163397px;height:144.99776872302937px;background:rgba(18,19,22,0.010);border-radius:50%;"></div>
+
+  <!-- ═══ РАБОТЫ / ПОРТФОЛИО ════════════════════════════ -->
+  <main style="position:absolute;left:0;top:0;width:1280px;height:24637px;" aria-label="Портфолио">
+
+    <!-- Шапка профиля -->
+    <figure class="work" style="left:43px;top:1112px;width:1195px;height:648px;">
+      <img src="./assets/1-1126.svg" class="frame-overlay" style="width:1195px;height:642px;" alt="">
+      <div class="img-bg" style="left:34px;top:26px;width:1127px;height:588px;background-image:url('./assets/1-1128.png');"></div>
+      <figcaption class="work-label" style="left:391px;top:633px;width:413px;height:15px;">ШАПКА ПРОФИЛЯ</figcaption>
+    </figure>
+
+    <!-- Серия рекламных Instagram-сторис -->
+    <figure class="work" style="left:43px;top:1781px;width:1195px;height:706px;">
+      <div class="img-bg" style="left:416px;top:30px;width:361.125px;height:642px;background-image:url('./assets/1-1120.png');"></div>
+      <div class="img-bg" style="left:34px;top:30px;width:362px;height:643px;background-image:url('./assets/1-1121.png');"></div>
+      <div class="img-bg" style="left:799px;top:30px;width:362px;height:643px;background-image:url('./assets/1-1122.png');"></div>
+      <img src="./assets/1-1123.svg" class="frame-overlay" style="width:1195px;height:700px;" alt="">
+      <figcaption class="work-label" style="left:391px;top:691px;width:413px;height:15px;">СЕРИЯ РЕКЛАМНЫХ INSTAGRAM-СТОРИС</figcaption>
+    </figure>
+
+    <!-- Баннер для YouTube -->
+    <figure class="work" style="left:43px;top:2508px;width:1195px;height:239px;">
+      <div class="img-bg" style="left:34px;top:22px;width:1127px;height:191px;background-image:url('./assets/1-1116.png');"></div>
+      <img src="./assets/1-1117.svg" class="frame-overlay" style="width:1195px;height:233px;" alt="">
+      <figcaption class="work-label" style="left:391px;top:224px;width:413px;height:15px;">БАННЕР ДЛЯ YOUTUBE</figcaption>
+    </figure>
+
+    <!-- Истории инстаграм (2768px) -->
+    <figure class="work" style="left:43px;top:2768px;width:1195px;height:707px;">
+      <img src="./assets/1-1110.svg" class="frame-overlay" style="width:1195px;height:699px;" alt="">
+      <div class="img-bg" style="left:415px;top:28px;width:363px;height:644px;background-image:url('./assets/1-1112.png');"></div>
+      <div class="img-bg" style="left:798px;top:28px;width:363px;height:644px;background-image:url('./assets/1-1113.png');"></div>
+      <div class="img-bg" style="left:34px;top:28px;width:363px;height:644px;background-image:url('./assets/1-1114.png');"></div>
+      <figcaption class="work-label" style="left:449px;top:690px;width:297px;height:17px;">ИСТОРИИ ИНСТАГРАМ</figcaption>
+    </figure>
+
+    <!-- Работа без подписи (3504px) -->
+    <figure class="work" style="left:61px;top:3504px;width:1157px;height:676px;">
+      <div class="img-bg" style="left:0;top:0;width:1157px;height:676px;background-image:url('./assets/1-1106.png');"></div>
+    </figure>
+
+    <!-- Превью для видеороликов -->
+    <figure class="work" style="left:43px;top:4220px;width:1195px;height:381px;">
+      <img src="./assets/1-1101.svg" class="frame-overlay" style="width:1195px;height:373px;" alt="">
+      <div class="img-bg" style="left:609px;top:31px;width:552px;height:311px;background-image:url('./assets/1-1103.png');"></div>
+      <div class="img-bg" style="left:34px;top:30px;width:552px;height:311px;background-image:url('./assets/1-1104.png');"></div>
+      <figcaption class="work-label" style="left:478px;top:364px;width:239px;height:17px;">ПРЕВЬЮ ДЛЯ ВИДЕОРОЛИКОВ</figcaption>
+    </figure>
+
+    <!-- Мокапы телефонов (4696px) -->
+    <figure class="work" style="left:91px;top:4696px;width:1100px;height:658px;">
+      <div style="position:absolute;left:718px;top:0px;width:382px;height:638px;">
+        <div class="img-bg" style="left:0;top:0;width:382px;height:638px;background-image:url('./assets/1-1089.png');"></div>
+        <div class="img-bg" style="left:0;top:0;width:382px;height:638px;background-image:url('./assets/1-1090.png');"></div>
+        <div class="blur-circle" style="left:-123.9696255477595px;top:-148px;width:160.2232180389094px;height:503.9254293918275px;filter:blur(63.900001525878906px);background:rgba(18,19,22,1.000);"></div>
+      </div>
+      <div style="position:absolute;left:351px;top:18px;width:385px;height:640px;">
+        <div class="img-bg" style="left:0;top:0;width:385px;height:640px;background-image:url('./assets/1-1093.png');"></div>
+        <div class="img-bg" style="left:0;top:0;width:385px;height:640px;background-image:url('./assets/1-1094.png');"></div>
+        <div class="blur-circle" style="left:-121.50213623046875px;top:186.62992984056473px;width:196.036140563991px;height:501.4848427216166px;filter:blur(63.900001525878906px);background:rgba(18,19,22,1.000);"></div>
+      </div>
+      <div class="img-bg" style="left:-7.694883379372186e-7px;top:6px;width:376.00000076948834px;height:635.0000004556341px;background-image:url('./assets/1-1096.png');"></div>
+    </figure>
+
+    <!-- декоративный разделитель -->
+    <img src="./assets/7.svg" style="position:absolute;left:222.9876708984375px;top:4629.912257554475px;width:843.0247388426214px;height:52.402677652891725px;" alt="" role="presentation">
+
+    <!-- Истории инстаграм (5384px) -->
+    <figure class="work" style="left:45px;top:5384.9970703125px;width:1195px;height:549px;">
+      <img src="./assets/1-1081.svg" class="frame-overlay" style="width:1195px;height:542px;" alt="">
+      <div class="img-bg" style="left:36px;top:32.0029296875px;width:269px;height:478px;background-image:url('./assets/1-1083.png');"></div>
+      <div class="img-bg" style="left:322px;top:32.0029296875px;width:269px;height:478px;background-image:url('./assets/1-1084.png');"></div>
+      <div class="img-bg" style="left:608px;top:32.0029296875px;width:269px;height:478px;background-image:url('./assets/1-1085.png');"></div>
+      <div class="img-bg" style="left:894px;top:32.0029296875px;width:269px;height:478px;background-image:url('./assets/1-1086.png');"></div>
+      <figcaption class="work-label" style="left:485.00006103515625px;top:534px;width:220px;height:15px;">ИСТОРИИ ИНСТАГРАМ</figcaption>
+    </figure>
+
+    <!-- Рекламные материалы для ресторана -->
+    <figure class="work" style="left:43px;top:5955px;width:1195px;height:514px;">
+      <img src="./assets/1-1076.svg" class="frame-overlay" style="width:1195px;height:506px;" alt="">
+      <div class="img-bg" style="left:34px;top:30px;width:856px;height:446px;background-image:url('./assets/1-1078.png');"></div>
+      <div class="img-bg" style="left:910px;top:30px;width:251px;height:446px;background-image:url('./assets/1-1079.png');"></div>
+      <figcaption class="work-label" style="left:435px;top:497px;width:325px;height:17px;">РЕКЛАМНЫЕ МАТЕРИАЛЫ ДЛЯ РЕСТОРАНА</figcaption>
+    </figure>
+
+    <!-- Работа без подписи (6517px) -->
+    <figure class="work" style="left:161px;top:6517px;width:958px;height:411px;">
+      <div class="img-bg" style="left:0;top:0;width:958px;height:411px;background-image:url('./assets/1-1074.png');"></div>
+    </figure>
+
+    <!-- Серия постеров -->
+    <figure class="work" style="left:43px;top:6976px;width:1195px;height:480px;">
+      <img src="./assets/1-1069.svg" class="frame-overlay" style="width:1195px;height:472px;" alt="">
+      <div class="img-bg" style="left:36px;top:32px;width:553px;height:410px;background-image:url('./assets/1-1071.png');"></div>
+      <div class="img-bg" style="left:613px;top:32px;width:547px;height:410px;background-image:url('./assets/1-1072.png');"></div>
+      <figcaption class="work-label" style="left:435px;top:463px;width:325px;height:17px;">СЕРИЯ ПОСТЕРОВ</figcaption>
+    </figure>
+
+    <!-- Работа без подписи (7497px) -->
+    <figure class="work" style="left:61px;top:7497px;width:1157px;height:508px;">
+      <div class="img-bg" style="left:0;top:0;width:1157px;height:508px;background-image:url('./assets/1-1067.png');"></div>
+    </figure>
+
+    <!-- Одежда -->
+    <figure class="work" style="left:43px;top:8045px;width:1195px;height:1774px;">
+      <div class="img-bg" style="left:0;top:0;width:1195px;height:1767px;background-image:url('./assets/1-1064.png');"></div>
+      <figcaption class="work-label" style="left:434px;top:1757px;width:325px;height:17px;">ОДЕЖДА</figcaption>
+    </figure>
+
+    <!-- Баннер для ВКонтакте -->
+    <figure class="work" style="left:42px;top:9855px;width:1195px;height:520px;">
+      <img src="./assets/1-1060.svg" class="frame-overlay" style="width:1195px;height:512px;" alt="">
+      <div class="img-bg" style="left:37px;top:31px;width:1124px;height:449.1064758300781px;background-image:url('./assets/1-1062.png');"></div>
+      <figcaption class="work-label" style="left:435px;top:503px;width:325px;height:17px;">БАННЕР ДЛЯ ВКОНТАКТЕ</figcaption>
+    </figure>
+
+    <!-- Афиши мероприятий -->
+    <figure class="work" style="left:45px;top:10410px;width:1195px;height:881px;">
+      <div class="img-bg" style="left:707px;top:34px;width:452px;height:803px;background-image:url('./assets/1-1055.png');"></div>
+      <div class="img-bg" style="left:36px;top:34px;width:642px;height:803px;background-image:url('./assets/1-1056.png');"></div>
+      <img src="./assets/1-1058.svg" class="frame-overlay" style="width:1195px;height:870.0424194335938px;" alt="">
+      <figcaption class="work-label" style="left:367px;top:860px;width:461px;height:21px;">АФИШИ МЕРОПРИЯТИЙ</figcaption>
+    </figure>
+
+    <!-- Истории инстаграм (11326px) -->
+    <figure class="work" style="left:45px;top:11326px;width:1195px;height:719px;">
+      <div style="position:absolute;left:36px;top:33px;width:1123px;height:686px;">
+        <div class="img-bg" style="left:380px;top:0;width:361px;height:642px;background-image:url('./assets/1-1050.png');"></div>
+        <div class="img-bg" style="left:762px;top:0;width:361px;height:642px;background-image:url('./assets/1-1051.png');"></div>
+        <div class="img-bg" style="left:0;top:0;width:361px;height:642px;background-image:url('./assets/1-1052.png');"></div>
+        <figcaption class="work-label" style="left:346px;top:669px;width:431px;height:17px;">ИСТОРИИ ИНСТАГРАМ</figcaption>
+      </div>
+      <img src="./assets/1-1053.svg" class="frame-overlay" style="width:1195px;height:711px;" alt="">
+    </figure>
+
+    <!-- Работа без подписи (12088px) -->
+    <figure class="work" style="left:64px;top:12088px;width:1157px;height:1284px;">
+      <div class="img-bg" style="left:0;top:0;width:1157px;height:1284px;background-image:url('./assets/1-1046.png');"></div>
+    </figure>
+
+    <!-- Превью для подкаста / видеоролика -->
+    <figure class="work" style="left:43px;top:13418px;width:1197px;height:364px;">
+      <div class="img-bg" style="left:34px;top:30px;width:527px;height:297px;background-image:url('./assets/1-1038.png');"></div>
+      <div class="img-bg" style="left:630px;top:29px;width:531px;height:299px;background-image:url('./assets/1-1039.png');"></div>
+      <div style="position:absolute;left:596px;top:29px;width:1px;height:1px;background:transparent;"></div>
+      <img src="./assets/1-1043.svg" class="frame-overlay" style="width:1197px;height:358px;" alt="">
+      <img src="./assets/1-1044.svg" class="frame-overlay" style="width:1197px;height:358px;" alt="">
+      <figcaption class="work-label" style="left:214px;top:349px;width:182px;height:15px;text-align:left;">ПРЕВЬЮ ДЛЯ ПОДКАСТА</figcaption>
+      <figcaption class="work-label" style="left:727px;top:349px;width:336px;height:15px;">ПРЕВЬЮ ДЛЯ ВИДЕОРОЛИКА</figcaption>
+    </figure>
+
+    <!-- Плитки для соц.сетей / Превью для сторис -->
+    <figure class="work" style="left:45px;top:13817px;width:1195px;height:683px;">
+      <div class="img-bg" style="left:31.79351806640625px;top:32.0244140625px;width:292px;height:292px;background-image:url('./assets/1-1022.png');"></div>
+      <div class="img-bg" style="left:347.79351806640625px;top:32.0244140625px;width:294px;height:293px;background-image:url('./assets/1-1023.png');"></div>
+      <div class="img-bg" style="left:31.79351806640625px;top:343.0244140625px;width:293px;height:294px;background-image:url('./assets/1-1024.png');"></div>
+      <div class="img-bg" style="left:347.79351806640625px;top:343.0244140625px;width:294px;height:294px;background-image:url('./assets/1-1025.png');"></div>
+      <img src="./assets/1-1026.svg" style="position:absolute;left:0;top:0;width:676px;height:671px;opacity:0.5;" alt="">
+      <img src="./assets/1-1029.svg" style="position:absolute;left:685px;top:0.037109375px;width:510px;height:671px;opacity:0.5;" alt="">
+      <div class="img-bg" style="left:717px;top:32px;width:442px;height:605px;background-image:url('./assets/1-1034.png');"></div>
+      <figcaption class="work-label" style="left:206px;top:662px;width:270px;height:21px;">ПЛИТКИ ДЛЯ СОЦ.СЕТЕЙ</figcaption>
+      <figcaption class="work-label" style="left:831px;top:662px;width:223px;height:21px;">ПРЕВЬЮ ДЛЯ СТОРИС</figcaption>
+    </figure>
+
+    <!-- WakeUp Coffee мокапы (14535px) -->
+    <figure class="work" style="left:77px;top:14535px;width:1127px;height:1444px;">
+      <div class="img-bg" style="left:0;top:0;width:477px;height:477px;background-image:url('./assets/1-972.png');"></div>
+      <div class="img-bg" style="left:525px;top:0;width:602px;height:600.9584350585938px;background-image:url('./assets/1-973.png');"></div>
+      <div style="position:absolute;left:0;top:641px;width:1127px;height:803px;">
+        <div class="img-bg" style="left:525px;top:0;width:602px;height:801.7355346679688px;background-image:url('./assets/1-975.png');"></div>
+        <div class="img-bg" style="left:0;top:326px;width:477px;height:477px;background-image:url('./assets/1-976.png');"></div>
+      </div>
+      <div style="position:absolute;left:0px;top:514.56640625px;width:232.4965362548828px;height:413.3271789550781px;background:rgba(0,0,0,1.000);overflow:hidden;"><div style="position:absolute;left:94.93612670898438px;top:215.705078125px;width:261.7738952636719px;height:261.7738952636719px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:-93.4290771484375px;top:296.001953125px;width:243.26026916503906px;height:243.26026916503906px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:-172.00436401367188px;top:75.9912109375px;width:587.9148559570312px;height:95.79718780517578px;filter:blur(75.34610748291016px);background:rgba(0,0,0,1.000);"></div><div style="position:absolute;left:-19.159387113538934px;top:263.28027175311945px;width:38.534150602308465px;height:207.3093888914118px;opacity:0.10000000149011612;filter:blur(75.34610748291016px);background:rgba(255,255,255,1.000);"></div><div style="position:absolute;left:207.95522928050406px;top:263.06542800311945px;width:38.53415060230844px;height:207.3093888914118px;opacity:0.10000000149011612;filter:blur(75.34610748291016px);background:rgba(255,255,255,1.000);"></div><div style="position:absolute;left:24.11077880859375px;top:54.89453125px;width:183.844482421875px;height:40.256343841552734px;background:rgba(255,255,255,1.000);border-radius:6.458237648010254px;"></div><div style="position:absolute;left:28.20099639892578px;top:63.2900390625px;width:175.6640625px;height:16.145591735839844px;color:rgba(0,0,0,1.000);font-family:'Benzin-Bold',sans-serif;font-size:12.055377006530762px;font-weight:400;line-height:12.6581449508667px;letter-spacing:-0.12055377006530762px;text-align:center;text-transform:uppercase;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Встречаем весну с WakeUp Coffee</div><div style="position:absolute;left:-79.005859375px;top:180.615234375px;width:243.26026916503906px;height:243.26026916503906px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:26.263427734375px;top:124.8037109375px;width:7.642247200012207px;height:8.909944534301758px;"><div style="position:absolute;left:0px;top:0px;width:7.642247200012207px;height:8.909944534301758px;background:rgba(217,217,217,1.000);"></div></div><div style="position:absolute;left:35.52033996582031px;top:103.9765625px;width:161.2406463623047px;height:30px;color:rgba(255,255,255,1.000);font-family:'Tilda Sans',sans-serif;font-size:9.256807327270508px;font-weight:400;line-height:9.719647407531738px;letter-spacing:normal;text-align:center;text-transform:uppercase;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Встречаем весну с WakeUp Coffee — больше света, больше вкуса, больше жизни</div><div style="position:absolute;left:-68.45735931396484px;top:-91.27652788520209px;width:249.86191835532554px;height:175.13114796415357px;"></div><div style="position:absolute;left:50.4637451171875px;top:139.7119140625px;width:117.42273712158203px;height:75.91545867919922px;"><div style="position:absolute;left:0px;top:0px;width:117.42273712158203px;height:75.91545867919922px;background:rgba(217,217,217,1.000);"></div></div><div style="position:absolute;left:-61.99908447265625px;top:144.0185546875px;width:329.8006286621094px;height:269.25128173828125px;"><div style="position:absolute;left:0px;top:0px;width:329.80059814453125px;height:269.25128173828125px;background:linear-gradient(180deg, rgba(255,255,255,0.000) 31.8%, rgba(255,255,255,1.000) 61.8%);"></div><div style="position:absolute;left:0px;top:0px;width:329.8006286621094px;height:269.2513122558594px;background:url('./assets/1-995.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:-49.08271026611328px;top:149.400390625px;width:299.4563293457031px;height:248.6343231201172px;background:url('./assets/1-996.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:-0.8610916137695312px;top:-76.85361494571771px;width:234.33617996119523px;height:142.25845427818422px;background:url('./assets/1-997.png');background-size:cover;background-position:center;"></div></div>
+      <div style="position:absolute;left:244.50341796875px;top:514px;width:232.4965362548828px;height:413.3271789550781px;background:rgba(0,0,0,1.000);overflow:hidden;"><div style="position:absolute;left:116.03311157226562px;top:260.052734375px;width:243.26026916503906px;height:243.26026916503906px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:-93.42929077148438px;top:336.474609375px;width:243.26026916503906px;height:243.26026916503906px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:-172.00439453125px;top:108.2841796875px;width:587.9148559570312px;height:108.71365356445312px;filter:blur(75.34611511230469px);background:rgba(0,0,0,1.000);"></div><div style="position:absolute;left:-19.159394742933443px;top:263.28222487811945px;width:38.53415060230844px;height:207.3093888914118px;opacity:0.10000000149011612;filter:blur(75.34611511230469px);background:rgba(255,255,255,1.000);"></div><div style="position:absolute;left:-27.985694827279076px;top:95.9443359375px;width:284.9242197811109px;height:242.01433056071983px;"><div style="position:absolute;left:31.689796389779076px;top:55.50215377869063px;width:221.54458924873188px;height:131.0094522245672px;background:linear-gradient(-169deg, rgba(255,255,255,1.000) 0.0%, rgba(255,255,255,0.000) 100.0%);"></div><div style="position:absolute;left:31.689796389779076px;top:55.50313034119063px;width:221.54458924873188px;height:131.0094522245672px;background:url('./assets/1-1005.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:207.955229280504px;top:263.06542800311945px;width:38.5341506023085px;height:207.3093888914118px;opacity:0.10000000149011612;filter:blur(75.34611511230469px);background:rgba(255,255,255,1.000);"></div><div style="position:absolute;left:44.9365234375px;top:14.85546875px;width:138.3434295654297px;height:76.02928924560547px;"><div style="position:absolute;left:0px;top:0px;width:138.3434295654297px;height:76.02928924560547px;background:linear-gradient(180deg, rgba(217,217,217,1.000) 0.0%, rgba(115,115,115,0.000) 70.4%);"></div><div style="position:absolute;left:5.673492431640625px;top:-11.8515625px;width:127.32347106933594px;height:127.32347106933594px;background:url('./assets/1-1009.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:24.11077880859375px;top:54.8955078125px;width:183.84446716308594px;height:38.96469497680664px;background:rgba(255,255,255,1.000);border-radius:6.458237648010254px;"></div><div style="position:absolute;left:28.20086669921875px;top:66.3046875px;width:175.66404724121094px;height:16.145591735839844px;color:rgba(0,0,0,1.000);font-family:'Benzin-Bold',sans-serif;font-size:17.86779022216797px;font-weight:400;line-height:18.761178970336914px;letter-spacing:-0.1786779022216797px;text-align:center;text-transform:uppercase;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">АТМОСФЕРА</div><div style="position:absolute;left:28.416259765625px;top:105.916015625px;width:175.44876098632812px;height:43px;color:rgba(255,255,255,1.000);font-family:'Tilda Sans',sans-serif;font-size:6.458237648010254px;font-weight:500;line-height:6.781149387359619px;letter-spacing:normal;text-align:center;text-transform:uppercase;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Окунись в атмосферу уюта и комфорта с "WakeUp Coffee"
+
+Наша кофейня - уголок тишины и комфорта, посреди городской суеты!
+
+Ждем Вас в гости!</div><div style="position:absolute;left:113.44970703125px;top:59.4169921875px;width:21.527456283569336px;height:21.527456283569336px;overflow:hidden;"></div><div style="position:absolute;left:124.85916137695312px;top:244.3369140625px;width:243.26026916503906px;height:243.26026916503906px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:-119.04690551757812px;top:216.9970703125px;width:243.26026916503906px;height:243.26026916503906px;background:rgba(255,255,255,1.000);border-radius:50%;"></div><div style="position:absolute;left:-21.312164306640625px;top:342.93359375px;width:262.419677734375px;height:32.29118347167969px;background:url('./assets/1-1018.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:-21.3121337890625px;top:381.0361328125px;width:262.419677734375px;height:32.29118347167969px;background:url('./assets/1-1019.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:-88.908447265625px;top:223.4560546875px;width:392.26129150390625px;height:219.99322509765625px;background:url('./assets/1-1020.png');background-size:cover;background-position:center;"></div></div>
+    </figure>
+
+    <!-- Танцевальная школа (16015px) -->
+    <figure class="work" style="left:77px;top:16015px;width:1127px;height:806px;">
+      <div class="img-bg" style="left:793px;top:472px;width:334px;height:334px;background-image:url('./assets/1-948.png');"></div>
+      <div class="img-bg" style="left:793px;top:0;width:333.9999694824219px;height:434.9677734375px;background-image:url('./assets/1-949.png');"></div>
+      <div class="img-bg" style="left:296.3780517578125px;top:343px;width:462.6219787597656px;height:462.6219787597656px;background-image:url('./assets/1-950.png');"></div>
+      <div style="position:absolute;left:0;top:0;width:759px;height:303.2667541503906px;">
+        <div class="img-bg" style="left:0;top:0;width:759px;height:303.2667541503906px;background-image:url('./assets/1-953.png');"></div>
+      </div>
+      <div style="position:absolute;left:0px;top:343px;width:260.3508605957031px;height:462.8459167480469px;background:rgba(255,255,255,1.000);overflow:hidden;"><div style="position:absolute;left:-82.203369140625px;top:249.263671875px;width:437.5464782714844px;height:308.3229064941406px;background:linear-gradient(180deg, rgba(0,0,0,0.000) 50.3%, rgba(0,0,0,1.000) 100.0%);"></div><div style="position:absolute;left:85.33718872070312px;top:16.15234375px;width:89.6763916015625px;height:42.42754364013672px;background:url('./assets/1-958.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:14.70501708984375px;top:63.16015625px;width:229.97657775878906px;height:89.67639923095703px;color:#fff;font-family:'Droid 1997',sans-serif;font-size:76.89991760253906px;font-weight:400;line-height:92.2799072265625px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Открыт набор</div><div style="position:absolute;left:-9.642631530761719px;top:131.140625px;width:269.99346923828125px;height:331.7062683105469px;"><div style="position:absolute;left:0.00000762939453125px;top:0px;width:269.99346923828125px;height:331.7062683105469px;background:linear-gradient(180deg, rgba(217,217,217,0.000) 51.8%, rgba(115,115,115,1.000) 85.7%);"></div><div style="position:absolute;left:-17.115623474121094px;top:-2.6521604479275993px;width:287.18397988427427px;height:336.69983338945895px;background:url('./assets/1-963.png');background-size:cover;background-position:center;"></div></div><div style="position:absolute;left:-19.2852783203125px;top:172.12109375px;width:282.8268737792969px;height:377.10247802734375px;background:linear-gradient(180deg, rgba(255,255,255,1.000) 28.6%, rgba(255,255,255,0.000) 100.0%), url('./assets/1-964.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:17.5977783203125px;top:141.98828125px;width:227.8829803466797px;height:341.9580383300781px;background:url('./assets/1-965.png');background-size:cover;background-position:center;"></div><div style="position:absolute;left:-27.963623046875px;top:87.265625px;width:310.0104064941406px;height:101.24755096435547px;color:rgba(197,149,110,1.000);font-family:'Marianna',sans-serif;font-size:50.864837646484375px;font-weight:400;line-height:64.29315948486328px;letter-spacing:normal;text-align:center;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Открыт набор</div><div style="position:absolute;left:21.93695068359375px;top:345.689453125px;width:216.23583984375px;height:83.1676254272461px;background:rgba(0,0,0,0.760);border-radius:12.294343948364258px;overflow:hidden;"><div style="position:absolute;left:12.535400390625px;top:10.607421875px;width:188.75436401367188px;height:220.04383850097656px;color:rgba(255,255,255,1.000);font-family:'Stem',sans-serif;font-size:10.365818977355957px;font-weight:350;line-height:12.128007888793945px;letter-spacing:normal;text-align:left;text-transform:none;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">Открыты наборы в детские группы на программу «Спортивные бальные танцы» на 25/26 год!
+Присоединяйтесь к нашей танцевальной семье!
+</div></div><div style="position:absolute;left:17.11572265625px;top:103.66015625px;width:232.62831115722656px;height:68.46263885498047px;color:rgba(1,1,1,1.000);font-family:'Benzin-Regular',sans-serif;font-size:16.874588012695312px;font-weight:400;line-height:104.86351776123047px;letter-spacing:normal;text-align:left;text-transform:uppercase;font-style:normal;text-decoration:none;opacity:1;mix-blend-mode:normal;overflow:hidden;white-space:pre-wrap;">в детские группы</div></div>
+    </figure>
+
+    <!-- Работа без подписи (16857px) -->
+    <figure class="work" style="left:77px;top:16857.671875px;width:1127px;height:859.328125px;">
+      <div class="img-bg" style="left:0;top:0;width:1127px;height:185.32505798339844px;background-image:url('./assets/1-945.png');"></div>
+      <div class="img-bg" style="left:0;top:225.328125px;width:1127px;height:634px;background-image:url('./assets/1-946.png');"></div>
+    </figure>
+
+    <!-- Работа без подписи (17755px) -->
+    <figure class="work" style="left:77px;top:17755px;width:1127px;height:740px;">
+      <div class="img-bg" style="left:0;top:0;width:554px;height:739px;background-image:url('./assets/1-942.png');"></div>
+      <div class="img-bg" style="left:573px;top:0;width:554px;height:740px;background-image:url('./assets/1-943.png');"></div>
+    </figure>
+
+    <!-- Работа без подписи (18534px) -->
+    <figure class="work" style="left:77px;top:18534px;width:1127px;height:985px;">
+      <div class="img-bg" style="left:0;top:0;width:1127px;height:634px;background-image:url('./assets/1-940.png');"></div>
+      <div class="img-bg" style="left:0;top:673px;width:553px;height:312px;background-image:url('./assets/1-939.png');"></div>
+      <div class="img-bg" style="left:574px;top:673px;width:553px;height:312px;background-image:url('./assets/1-938.png');"></div>
+    </figure>
+
+    <!-- Работа без подписи (19557px) -->
+    <figure class="work" style="left:77px;top:19557px;width:1127px;height:551px;">
+      <div class="img-bg" style="left:346px;top:0;width:780px;height:326px;background-image:url('./assets/1-934.png');"></div>
+      <div class="img-bg" style="left:0;top:365px;width:1127px;height:186px;background-image:url('./assets/1-935.png');"></div>
+      <div class="img-bg" style="left:0;top:0;width:324px;height:326px;background-image:url('./assets/1-936.png');border-radius:401.404052734375px;"></div>
+    </figure>
+
+    <!-- Работа без подписи (20147px) -->
+    <figure class="work" style="left:77px;top:20147px;width:1127px;height:1299px;">
+      <div class="img-bg" style="left:0;top:0;width:468px;height:626px;background-image:url('./assets/1-930.png');"></div>
+      <div class="img-bg" style="left:495px;top:0;width:632px;height:626px;background-image:url('./assets/1-932.png');"></div>
+      <div class="img-bg" style="left:0;top:665px;width:1127px;height:634px;background-image:url('./assets/1-931.png');"></div>
+    </figure>
+
+    <!-- Работа без подписи (21485px) -->
+    <figure class="work" style="left:77px;top:21485px;width:1127px;height:1138px;">
+      <div class="img-bg" style="left:0;top:0;width:711px;height:438px;background-image:url('./assets/1-925.png');"></div>
+      <div class="img-bg" style="left:749px;top:0;width:378px;height:438px;background-image:url('./assets/1-928.png');"></div>
+      <div class="img-bg" style="left:0;top:478px;width:659px;height:660px;background-image:url('./assets/1-927.png');"></div>
+      <div class="img-bg" style="left:687px;top:478px;width:440px;height:660px;background-image:url('./assets/1-926.png');"></div>
+    </figure>
+
+    <!-- Работа без подписи (22663px) -->
+    <figure class="work" style="left:77px;top:22663px;width:1127px;height:877px;">
+      <div class="img-bg" style="left:0;top:0;width:440px;height:440px;background-image:url('./assets/1-921.png');"></div>
+      <div class="img-bg" style="left:467px;top:0;width:660px;height:440px;background-image:url('./assets/1-920.png');"></div>
+      <div class="img-bg" style="left:0;top:479px;width:398px;height:398px;background-image:url('./assets/1-922.png');"></div>
+      <div class="img-bg" style="left:420px;top:479px;width:707px;height:398px;background-image:url('./assets/1-923.png');"></div>
+    </figure>
+
+    <!-- Работа без подписи (23579px) -->
+    <figure class="work" style="left:77px;top:23579px;width:1127px;height:983px;">
+      <div class="img-bg" style="left:0;top:0;width:1127px;height:633px;background-image:url('./assets/1-916.png');"></div>
+      <div class="img-bg" style="left:0;top:672px;width:552px;height:311px;background-image:url('./assets/1-917.png');"></div>
+      <div class="img-bg" style="left:578px;top:674px;width:549px;height:309px;background-image:url('./assets/1-918.png');"></div>
+    </figure>
+
+  </main>
+
 </div>
 </body>
 </html>
