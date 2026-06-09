@@ -103,6 +103,7 @@ body { background: #1a1a1a; }
 
 /* ── Admin button ─────────────────────────────────────── */
 #admin-btn {
+  display: none;
   position: fixed;
   bottom: 24px;
   right: 24px;
@@ -1198,6 +1199,14 @@ function saveProject() {
 //  INIT
 // ────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', renderAll);
+
+// Показать кнопку по Ctrl+Shift+A
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.shiftKey && e.code === 'KeyA') {
+    const btn = document.getElementById('admin-btn');
+    btn.style.display = btn.style.display === 'flex' ? 'none' : 'flex';
+  }
+});
 </script>
 
 </body>
