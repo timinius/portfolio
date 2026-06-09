@@ -55,8 +55,6 @@ body { background: #1a1a1a; }
 
 /* ── Works flow ───────────────────────────────────────── */
 figure.work {
-  position: relative !important;
-  top: auto !important;
   margin-bottom: 30px;
   flex-shrink: 0;
 }
@@ -1015,6 +1013,11 @@ function extractOrigMeta() {
   document.querySelectorAll('figure.work').forEach((fig, i) => {
     const id = 'orig-' + i;
     fig.dataset.workId = id;
+
+    // Convert from absolute to flow
+    fig.style.position = 'relative';
+    fig.style.top      = '';
+    fig.style.left     = fig.style.left || '0px'; // keep horizontal offset
 
     // thumbnail: first img-bg background-image or first <img>
     let thumbUrl = '';
