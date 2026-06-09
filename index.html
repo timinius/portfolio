@@ -56,14 +56,16 @@ body { background: #1a1a1a; }
 
 /* ── User projects ────────────────────────────────────── */
 #user-projects {
-  position: relative;
+  position: absolute;
+  top: 1112px;
+  left: 0;
   width: 100%;
+  padding: 0 42px 60px;
 }
 .user-project {
   position: relative;
   width: 1195px;
-  margin: 0 auto 60px;
-  left: 0;
+  margin: 0 0 60px 0;
 }
 .user-project__img-wrap {
   position: relative;
@@ -218,6 +220,34 @@ body { background: #1a1a1a; }
   transition: background .15s;
 }
 .proj-item__edit:hover { background: rgba(154,128,86,.35); }
+.proj-item__drag {
+  cursor: grab;
+  color: rgba(255,255,255,.25);
+  font-size: 18px;
+  padding: 0 4px;
+  user-select: none;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color .15s;
+}
+.proj-item__drag:active { cursor: grabbing; }
+.proj-item__drag:hover { color: rgba(154,128,86,.8); }
+.proj-item.drag-over {
+  border-color: rgba(154,128,86,.7);
+  background: rgba(154,128,86,.08);
+}
+.proj-item.dragging-list { opacity: .35; }
+#proj-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+#proj-list-header span {
+  font-size: 11px;
+  color: rgba(200,200,200,.35);
+  letter-spacing: .04em;
+}
 
 /* form */
 #proj-form { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; }
@@ -835,7 +865,7 @@ PremierePro. Люблю сложные, интересные
   </main>
 
   <!-- ═══ USER PROJECTS (dynamic) ══════════════════════ -->
-  <div id="user-projects" style="padding: 60px 0 80px;"></div>
+  <div id="user-projects"></div>
 
 </div>
 
@@ -850,6 +880,10 @@ PremierePro. Люблю сложные, интересные
     <button class="close-btn" onclick="adminClose()">✕</button>
     <h2>Управление проектами</h2>
 
+    <div id="proj-list-header" style="display:none;">
+      <span id="proj-list-count"></span>
+      <span>перетащите для сортировки</span>
+    </div>
     <div id="proj-list"></div>
 
     <div id="proj-form">
@@ -998,11 +1032,32 @@ function fitFrameToWrap(p) {
   if (grad) { grad.setAttribute('x2', w); grad.setAttribute('y2', h); }
 }
 
+const WORKS_START_Y = 1112; // top of first figure.work in original layout
+
+function shiftWorks() {
+  const container = document.getElementById('user-projects');
+  const canvas    = document.querySelector('.canvas');
+  const shift     = container.offsetHeight; // how much to push works down
+
+  // Save original top values once (data-orig-top attribute)
+  document.querySelectorAll('figure.work').forEach(fig => {
+    if (!fig.dataset.origTop) {
+      fig.dataset.origTop = parseFloat(fig.style.top) || 0;
+    }
+    fig.style.top = (parseFloat(fig.dataset.origTop) + shift) + 'px';
+  });
+
+  // Stretch main and canvas
+  const mainEl = document.querySelector('main');
+  if (mainEl) mainEl.style.height = (CANVAS_BASE_H + shift) + 'px';
+  canvas.style.height = (CANVAS_BASE_H + shift) + 'px';
+}
+
 function renderAll() {
   const projects = loadProjects();
   const container = document.getElementById('user-projects');
-  const canvas    = document.querySelector('.canvas');
 
+  // Build HTML
   let html = '';
   projects.forEach(p => {
     const imgs = p.images || [];
@@ -1010,31 +1065,32 @@ function renderAll() {
     const frameOverlay = p.hasFrame
       ? `<div class="user-project__frame" id="frame_${p.id}">${gradientSVG(1195, 400, 'g_' + p.id)}</div>`
       : '';
-
     html += `<div class="user-project" data-id="${p.id}">
       <div class="user-project__img-wrap">${imgsHtml}${frameOverlay}</div>
       ${p.label ? `<div class="user-project__label">${p.label}</div>` : ''}
     </div>`;
   });
-
   container.innerHTML = html;
 
-  // Fix frame sizes after images have loaded/laid out
+  // Fix gradient frames after images load, then shift works
   const withFrame = projects.filter(p => p.hasFrame);
-  if (withFrame.length) {
-    // Wait for all images in user-projects to load, then fit
-    const allImgs = Array.from(container.querySelectorAll('img'));
-    let loaded = 0;
-    const onLoad = () => { if (++loaded >= allImgs.length) withFrame.forEach(fitFrameToWrap); };
-    if (!allImgs.length) { withFrame.forEach(fitFrameToWrap); }
-    else allImgs.forEach(i => { if (i.complete) onLoad(); else { i.onload = onLoad; i.onerror = onLoad; } });
-  }
+  const allImgs   = Array.from(container.querySelectorAll('img'));
 
-  // Extend canvas height
-  requestAnimationFrame(() => {
-    const projH = container.offsetHeight;
-    canvas.style.height = (CANVAS_BASE_H + (projH > 0 ? projH + 80 : 0)) + 'px';
-  });
+  const afterLoad = () => {
+    if (withFrame.length) withFrame.forEach(fitFrameToWrap);
+    shiftWorks();
+  };
+
+  if (!allImgs.length) {
+    requestAnimationFrame(afterLoad);
+  } else {
+    let loaded = 0;
+    const onLoad = () => { if (++loaded >= allImgs.length) afterLoad(); };
+    allImgs.forEach(img => {
+      if (img.complete) onLoad();
+      else { img.onload = onLoad; img.onerror = onLoad; }
+    });
+  }
 }
 
 // ────────────────────────────────────────────────────────
@@ -1052,30 +1108,77 @@ function overlayClick(e) {
   if (e.target === document.getElementById('admin-overlay')) adminClose();
 }
 
+let listDragSrc = null;
+
 function renderProjList() {
   const projects = loadProjects();
   const list = document.getElementById('proj-list');
+  const header = document.getElementById('proj-list-header');
+  const counter = document.getElementById('proj-list-count');
+
   if (!projects.length) {
+    header.style.display = 'none';
     list.innerHTML = '<p style="color:rgba(200,200,200,.35);font-size:13px;margin-bottom:20px;">Пользовательских проектов пока нет</p>';
     return;
   }
+
+  header.style.display = 'flex';
+  counter.textContent = `${projects.length} ${projects.length === 1 ? 'проект' : projects.length < 5 ? 'проекта' : 'проектов'}`;
+
   const LAYOUT_LABEL = { row: 'в ряд', grid: 'сетка', stack: 'стопка' };
-  list.innerHTML = projects.map(p => {
+  list.innerHTML = projects.map((p, i) => {
     const thumb = p.images && p.images[0]
       ? `<img class="proj-item__thumb" src="${p.images[0]}" alt="">`
       : `<div class="proj-item__thumb"></div>`;
     const cnt = p.images ? p.images.length : 0;
     const layoutStr = cnt > 1 ? ` · ${LAYOUT_LABEL[p.layout] || 'в ряд'}` : '';
-    return `<div class="proj-item">
+    return `<div class="proj-item"
+        draggable="true"
+        data-idx="${i}"
+        ondragstart="listDragStart(event,${i})"
+        ondragover="listDragOver(event)"
+        ondrop="listDragDrop(event,${i})"
+        ondragleave="listDragLeave(event)"
+        ondragend="listDragEnd(event)">
+      <span class="proj-item__drag" title="Перетащите для изменения порядка">⠿</span>
       ${thumb}
       <div class="proj-item__info">
         <div class="proj-item__name">${p.label || '(без подписи)'}</div>
         <div class="proj-item__meta">${cnt} фото${layoutStr} · ${p.hasFrame ? 'с рамкой' : 'без рамки'}</div>
       </div>
-      <button class="proj-item__edit" onclick="editProject('${p.id}')">✏ Ред.</button>
-      <button class="proj-item__del"  onclick="deleteProject('${p.id}')">🗑 Удалить</button>
+      <button class="proj-item__edit" onclick="editProject('${p.id}')">✏</button>
+      <button class="proj-item__del"  onclick="deleteProject('${p.id}')">🗑</button>
     </div>`;
   }).join('');
+}
+
+function listDragStart(e, idx) {
+  listDragSrc = idx;
+  e.currentTarget.classList.add('dragging-list');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function listDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function listDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function listDragDrop(e, toIdx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (listDragSrc === null || listDragSrc === toIdx) return;
+  const projects = loadProjects();
+  const moved = projects.splice(listDragSrc, 1)[0];
+  projects.splice(toIdx, 0, moved);
+  saveProjects(projects);
+  renderProjList();
+  renderAll();
+}
+function listDragEnd(e) {
+  e.currentTarget.classList.remove('dragging-list');
+  document.querySelectorAll('.proj-item').forEach(el => el.classList.remove('drag-over'));
+  listDragSrc = null;
 }
 
 // ── Image upload & drag-reorder ──────────────────────────
