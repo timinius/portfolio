@@ -48,10 +48,371 @@ body { background: #1a1a1a; }
 .canvas {
   position: relative;
   width: 1280px;
-  height: 24637px;
+  min-height: 24637px;
   background: rgba(18,19,22,1.000);
   overflow: hidden;
   margin: 0 auto;
+}
+
+/* ── User projects ────────────────────────────────────── */
+#user-projects {
+  position: relative;
+  width: 100%;
+}
+.user-project {
+  position: relative;
+  width: 1195px;
+  margin: 0 auto 60px;
+  left: 0;
+}
+.user-project__img-wrap {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+.user-project__img-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+}
+.user-project__frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.user-project__frame svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.user-project__label {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 13.2px;
+  text-align: center;
+  color: rgba(255,255,255,1.000);
+  text-transform: none;
+  padding-top: 18px;
+  letter-spacing: 0.05em;
+}
+
+/* ── Admin button ─────────────────────────────────────── */
+#admin-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(154,128,86,0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  transition: transform .2s, background .2s;
+}
+#admin-btn:hover { background: rgba(180,152,106,1); transform: scale(1.08); }
+#admin-btn svg { width: 22px; height: 22px; fill: #fff; }
+
+/* ── Admin overlay ────────────────────────────────────── */
+#admin-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 9100;
+  backdrop-filter: blur(4px);
+}
+#admin-overlay.open { display: flex; align-items: flex-start; justify-content: center; padding-top: 40px; }
+
+#admin-panel {
+  background: #1a1b1f;
+  border: 1px solid rgba(154,128,86,0.4);
+  border-radius: 16px;
+  width: 640px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 28px 32px 32px;
+  color: #e0ddd5;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  position: relative;
+}
+#admin-panel h2 {
+  font-family: 'Druk Text Wide', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(154,128,86,1);
+  margin-bottom: 24px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+#admin-panel .close-btn {
+  position: absolute;
+  top: 20px; right: 24px;
+  background: none; border: none; cursor: pointer;
+  color: rgba(200,200,200,.6); font-size: 22px; line-height: 1;
+}
+#admin-panel .close-btn:hover { color: #fff; }
+
+/* project list */
+#proj-list { margin-bottom: 28px; }
+.proj-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.proj-item__thumb {
+  width: 56px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  background: #333;
+}
+.proj-item__info { flex: 1; min-width: 0; }
+.proj-item__name {
+  font-size: 13px;
+  font-weight: 400;
+  color: #e0ddd5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.proj-item__meta { font-size: 11px; color: rgba(200,200,200,.4); margin-top: 2px; }
+.proj-item__del {
+  background: rgba(200,60,60,.15);
+  border: 1px solid rgba(200,60,60,.3);
+  color: rgba(255,120,120,.8);
+  border-radius: 7px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.proj-item__del:hover { background: rgba(200,60,60,.35); }
+.proj-item__edit {
+  background: rgba(154,128,86,.15);
+  border: 1px solid rgba(154,128,86,.3);
+  color: rgba(220,196,140,.8);
+  border-radius: 7px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.proj-item__edit:hover { background: rgba(154,128,86,.35); }
+
+/* form */
+#proj-form { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; }
+#proj-form h3 {
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(154,128,86,.8);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 18px;
+}
+.form-row { margin-bottom: 16px; }
+.form-row label {
+  display: block;
+  font-size: 12px;
+  color: rgba(200,200,200,.6);
+  margin-bottom: 6px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.form-row input[type=text],
+.form-row textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #e0ddd5;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s;
+}
+.form-row input[type=text]:focus,
+.form-row textarea:focus { border-color: rgba(154,128,86,.6); }
+.form-row textarea { resize: vertical; min-height: 64px; }
+
+.form-row input[type=file] { display: none; }
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px dashed rgba(255,255,255,0.18);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: rgba(200,200,200,.7);
+  transition: border-color .15s, background .15s;
+}
+.file-upload-btn:hover { border-color: rgba(154,128,86,.5); background: rgba(154,128,86,.07); color: #e0ddd5; }
+
+#img-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.img-preview-item {
+  position: relative;
+  width: 80px;
+  height: 60px;
+}
+.img-preview-item img {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.img-preview-item .rm {
+  position: absolute;
+  top: -6px; right: -6px;
+  width: 18px; height: 18px;
+  background: rgba(180,50,50,.9);
+  border: none; border-radius: 50%;
+  cursor: pointer;
+  color: #fff; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.toggle-wrap {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.toggle-wrap input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.12);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.toggle-slider:before {
+  content: '';
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #888;
+  transition: transform .2s, background .2s;
+}
+.toggle-wrap input:checked + .toggle-slider { background: rgba(154,128,86,0.35); }
+.toggle-wrap input:checked + .toggle-slider:before { transform: translateX(20px); background: rgba(154,128,86,1); }
+.toggle-label { font-size: 13px; color: #c0bdb5; cursor: pointer; user-select: none; }
+
+.form-actions { display: flex; gap: 10px; margin-top: 20px; }
+.btn-primary {
+  flex: 1;
+  padding: 10px 0;
+  background: rgba(154,128,86,1);
+  border: none;
+  border-radius: 9px;
+  color: #fff;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-primary:hover { background: rgba(180,152,106,1); }
+.btn-cancel {
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 9px;
+  color: rgba(200,200,200,.7);
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-cancel:hover { background: rgba(255,255,255,0.1); }
+
+/* ── Layout picker ────────────────────────────────────── */
+.layout-picker {
+  display: flex;
+  gap: 8px;
+}
+.layout-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  color: rgba(200,200,200,.5);
+  font-family: 'Helvetica', sans-serif;
+  font-size: 11px;
+  letter-spacing: .04em;
+  transition: all .15s;
+  min-width: 72px;
+}
+.layout-btn svg {
+  width: 36px;
+  height: 28px;
+  fill: currentColor;
+}
+.layout-btn:hover {
+  border-color: rgba(154,128,86,.4);
+  color: rgba(200,200,200,.85);
+  background: rgba(154,128,86,.07);
+}
+.layout-btn.active {
+  border-color: rgba(154,128,86,.8);
+  color: rgba(220,196,140,1);
+  background: rgba(154,128,86,.15);
+}
+
+/* ── Drag-reorder previews ────────────────────────────── */
+.img-preview-item {
+  cursor: grab;
+  user-select: none;
+}
+.img-preview-item:active { cursor: grabbing; }
+.img-preview-item.dragging { opacity: .4; }
+.drag-handle {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  color: rgba(255,255,255,.5);
+  line-height: 1;
+  pointer-events: none;
 }
 
 /* ── Utility ──────────────────────────────────────────── */
@@ -476,6 +837,372 @@ PremierePro. Люблю сложные, интересные
 
   </main>
 
+  <!-- ═══ USER PROJECTS (dynamic) ══════════════════════ -->
+  <div id="user-projects" style="padding: 60px 0 80px;"></div>
+
 </div>
+
+<!-- ── Admin button ──────────────────────────────────── -->
+<button id="admin-btn" title="Управление проектами" onclick="adminOpen()">
+  <svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.92c.04-.34.07-.69.07-1.08s-.03-.74-.07-1.08l2.33-1.82c.21-.16.27-.46.13-.7l-2.2-3.82c-.14-.23-.43-.31-.67-.23l-2.75 1.1c-.57-.44-1.18-.81-1.86-1.08l-.42-2.93A.53.53 0 0 0 14 2h-4a.53.53 0 0 0-.53.44l-.42 2.93c-.68.27-1.29.64-1.86 1.08l-2.75-1.1c-.24-.09-.53 0-.67.23L1.57 9.5c-.14.24-.08.54.13.7l2.33 1.82C4.03 12.37 4 12.72 4 13.07s.03.74.07 1.08L1.7 16c-.21.16-.27.46-.13.7l2.2 3.82c.14.23.43.31.67.23l2.75-1.1c.57.44 1.18.81 1.86 1.08l.42 2.93c.07.26.3.44.53.44h4c.23 0 .46-.18.53-.44l.42-2.93c.68-.27 1.29-.64 1.86-1.08l2.75 1.1c.24.09.53 0 .67-.23l2.2-3.82c.14-.24.08-.54-.13-.7l-2.33-1.85z"/></svg>
+</button>
+
+<!-- ── Admin overlay ─────────────────────────────────── -->
+<div id="admin-overlay" onclick="overlayClick(event)">
+  <div id="admin-panel">
+    <button class="close-btn" onclick="adminClose()">✕</button>
+    <h2>Управление проектами</h2>
+
+    <div id="proj-list"></div>
+
+    <div id="proj-form">
+      <h3 id="form-title">Добавить проект</h3>
+
+      <div class="form-row">
+        <label>Изображение(я)</label>
+        <label class="file-upload-btn" for="img-input">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+          Выбрать файл(ы)
+        </label>
+        <input type="file" id="img-input" accept="image/*" multiple onchange="onImgSelect(event)">
+        <div id="img-preview-list"></div>
+      </div>
+
+      <div class="form-row">
+        <label>Подпись (название проекта)</label>
+        <input type="text" id="label-input" placeholder="НАЗВАНИЕ ПРОЕКТА">
+      </div>
+
+      <!-- Layout picker (shown only when ≥2 images) -->
+      <div class="form-row" id="layout-row" style="display:none;">
+        <label>Компоновка фото</label>
+        <div class="layout-picker">
+          <button type="button" class="layout-btn active" data-layout="row" onclick="setLayout('row')" title="В ряд">
+            <svg viewBox="0 0 36 24"><rect x="1" y="1" width="10" height="22" rx="2"/><rect x="13" y="1" width="10" height="22" rx="2"/><rect x="25" y="1" width="10" height="22" rx="2"/></svg>
+            <span>В ряд</span>
+          </button>
+          <button type="button" class="layout-btn" data-layout="grid" onclick="setLayout('grid')" title="Сетка 2×N">
+            <svg viewBox="0 0 36 36"><rect x="1" y="1" width="15" height="15" rx="2"/><rect x="20" y="1" width="15" height="15" rx="2"/><rect x="1" y="20" width="15" height="15" rx="2"/><rect x="20" y="20" width="15" height="15" rx="2"/></svg>
+            <span>Сетка</span>
+          </button>
+          <button type="button" class="layout-btn" data-layout="stack" onclick="setLayout('stack')" title="Стопка">
+            <svg viewBox="0 0 36 36"><rect x="1" y="1" width="34" height="10" rx="2"/><rect x="1" y="13" width="34" height="10" rx="2"/><rect x="1" y="25" width="34" height="10" rx="2"/></svg>
+            <span>Стопка</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="toggle-row">
+          <label class="toggle-wrap">
+            <input type="checkbox" id="frame-toggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label" onclick="document.getElementById('frame-toggle').click()">С градиентной рамкой</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-primary" onclick="saveProject()">Сохранить проект</button>
+        <button class="btn-cancel" onclick="resetForm()">Очистить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ────────────────────────────────────────────────────────
+//  DATA
+// ────────────────────────────────────────────────────────
+const CANVAS_BASE_H = 24637;
+let editId      = null;
+let curLayout   = 'row';   // 'row' | 'grid' | 'stack'
+let pendingImages = [];    // [{dataUrl, name}]
+let dragSrcIdx  = null;
+
+function loadProjects() {
+  try { return JSON.parse(localStorage.getItem('portfolio_projects') || '[]'); }
+  catch { return []; }
+}
+function saveProjects(arr) {
+  localStorage.setItem('portfolio_projects', JSON.stringify(arr));
+}
+
+// ────────────────────────────────────────────────────────
+//  LAYOUT HELPERS
+// ────────────────────────────────────────────────────────
+function setLayout(l) {
+  curLayout = l;
+  document.querySelectorAll('.layout-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.layout === l);
+  });
+}
+
+function buildImgsHtml(imgs, layout) {
+  if (!imgs.length) return '';
+  if (imgs.length === 1) {
+    return `<img src="${imgs[0]}" alt="" style="width:100%;height:auto;display:block;border-radius:14px;">`;
+  }
+  const gap = 10;
+  const r = 12;
+  // effective layout: if only 2 imgs + stack → treat as row anyway
+  const eff = (imgs.length === 2 && layout === 'stack') ? 'row' : layout;
+
+  if (eff === 'row') {
+    const w = ((100 - gap * (imgs.length - 1) / imgs.length)).toFixed(2);
+    return `<div style="display:flex;gap:${gap}px;align-items:flex-start;">
+      ${imgs.map(s => `<img src="${s}" alt="" style="flex:1 1 0;min-width:0;width:0;max-width:none;height:auto;border-radius:${r}px;display:block;">`).join('')}
+    </div>`;
+  }
+  if (eff === 'grid') {
+    const cols = imgs.length <= 2 ? 2 : imgs.length === 3 ? 3 : 2;
+    return `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px;">
+      ${imgs.map(s => `<img src="${s}" alt="" style="width:100%;height:auto;border-radius:${r}px;display:block;">`).join('')}
+    </div>`;
+  }
+  if (eff === 'stack') {
+    return `<div style="display:flex;flex-direction:column;gap:${gap}px;">
+      ${imgs.map(s => `<img src="${s}" alt="" style="width:100%;height:auto;border-radius:${r}px;display:block;">`).join('')}
+    </div>`;
+  }
+  return '';
+}
+
+// ────────────────────────────────────────────────────────
+//  RENDER PORTFOLIO
+// ────────────────────────────────────────────────────────
+function gradientSVG(w, h, uid) {
+  return `<svg viewBox="0 0 ${w} ${h}" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <rect x="0.5" y="0.5" width="${w-1}" height="${h-1}" rx="18.5" stroke="url(#${uid})"/>
+    <defs>
+      <linearGradient id="${uid}" x1="0" y1="0" x2="${w}" y2="${h}" gradientUnits="userSpaceOnUse">
+        <stop stop-color="white"/>
+        <stop offset="0.28" stop-color="white" stop-opacity="0"/>
+        <stop offset="0.43" stop-color="white" stop-opacity="0"/>
+        <stop offset="0.55" stop-color="white" stop-opacity="0.51"/>
+        <stop offset="0.70" stop-color="white" stop-opacity="0"/>
+        <stop offset="0.85" stop-color="white" stop-opacity="0"/>
+        <stop offset="1" stop-color="white"/>
+      </linearGradient>
+    </defs>
+  </svg>`;
+}
+
+function fitFrameToWrap(p) {
+  const el = document.querySelector(`.user-project[data-id="${p.id}"] .user-project__img-wrap`);
+  const frameEl = document.getElementById('frame_' + p.id);
+  if (!el || !frameEl) return;
+  const h = el.offsetHeight, w = el.offsetWidth;
+  const svg = frameEl.querySelector('svg');
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.querySelector('rect').setAttribute('width',  w - 1);
+  svg.querySelector('rect').setAttribute('height', h - 1);
+  const grad = svg.querySelector('linearGradient');
+  if (grad) { grad.setAttribute('x2', w); grad.setAttribute('y2', h); }
+}
+
+function renderAll() {
+  const projects = loadProjects();
+  const container = document.getElementById('user-projects');
+  const canvas    = document.querySelector('.canvas');
+
+  let html = '';
+  projects.forEach(p => {
+    const imgs = p.images || [];
+    const imgsHtml = buildImgsHtml(imgs, p.layout || 'row');
+    const frameOverlay = p.hasFrame
+      ? `<div class="user-project__frame" id="frame_${p.id}">${gradientSVG(1195, 400, 'g_' + p.id)}</div>`
+      : '';
+
+    html += `<div class="user-project" data-id="${p.id}">
+      <div class="user-project__img-wrap">${imgsHtml}${frameOverlay}</div>
+      ${p.label ? `<div class="user-project__label">${p.label}</div>` : ''}
+    </div>`;
+  });
+
+  container.innerHTML = html;
+
+  // Fix frame sizes after images have loaded/laid out
+  const withFrame = projects.filter(p => p.hasFrame);
+  if (withFrame.length) {
+    // Wait for all images in user-projects to load, then fit
+    const allImgs = Array.from(container.querySelectorAll('img'));
+    let loaded = 0;
+    const onLoad = () => { if (++loaded >= allImgs.length) withFrame.forEach(fitFrameToWrap); };
+    if (!allImgs.length) { withFrame.forEach(fitFrameToWrap); }
+    else allImgs.forEach(i => { if (i.complete) onLoad(); else { i.onload = onLoad; i.onerror = onLoad; } });
+  }
+
+  // Extend canvas height
+  requestAnimationFrame(() => {
+    const projH = container.offsetHeight;
+    canvas.style.height = (CANVAS_BASE_H + (projH > 0 ? projH + 80 : 0)) + 'px';
+  });
+}
+
+// ────────────────────────────────────────────────────────
+//  ADMIN UI
+// ────────────────────────────────────────────────────────
+function adminOpen() {
+  renderProjList();
+  resetForm();
+  document.getElementById('admin-overlay').classList.add('open');
+}
+function adminClose() {
+  document.getElementById('admin-overlay').classList.remove('open');
+}
+function overlayClick(e) {
+  if (e.target === document.getElementById('admin-overlay')) adminClose();
+}
+
+function renderProjList() {
+  const projects = loadProjects();
+  const list = document.getElementById('proj-list');
+  if (!projects.length) {
+    list.innerHTML = '<p style="color:rgba(200,200,200,.35);font-size:13px;margin-bottom:20px;">Пользовательских проектов пока нет</p>';
+    return;
+  }
+  const LAYOUT_LABEL = { row: 'в ряд', grid: 'сетка', stack: 'стопка' };
+  list.innerHTML = projects.map(p => {
+    const thumb = p.images && p.images[0]
+      ? `<img class="proj-item__thumb" src="${p.images[0]}" alt="">`
+      : `<div class="proj-item__thumb"></div>`;
+    const cnt = p.images ? p.images.length : 0;
+    const layoutStr = cnt > 1 ? ` · ${LAYOUT_LABEL[p.layout] || 'в ряд'}` : '';
+    return `<div class="proj-item">
+      ${thumb}
+      <div class="proj-item__info">
+        <div class="proj-item__name">${p.label || '(без подписи)'}</div>
+        <div class="proj-item__meta">${cnt} фото${layoutStr} · ${p.hasFrame ? 'с рамкой' : 'без рамки'}</div>
+      </div>
+      <button class="proj-item__edit" onclick="editProject('${p.id}')">✏ Ред.</button>
+      <button class="proj-item__del"  onclick="deleteProject('${p.id}')">🗑 Удалить</button>
+    </div>`;
+  }).join('');
+}
+
+// ── Image upload & drag-reorder ──────────────────────────
+function onImgSelect(e) {
+  const files = Array.from(e.target.files);
+  Promise.all(files.map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = ev => res({ dataUrl: ev.target.result, name: f.name });
+    r.readAsDataURL(f);
+  }))).then(results => {
+    pendingImages = pendingImages.concat(results);
+    renderImgPreviews();
+    updateLayoutRowVisibility();
+  });
+  e.target.value = '';
+}
+
+function updateLayoutRowVisibility() {
+  document.getElementById('layout-row').style.display =
+    pendingImages.length >= 2 ? '' : 'none';
+}
+
+function renderImgPreviews() {
+  const list = document.getElementById('img-preview-list');
+  list.innerHTML = pendingImages.map((img, i) => `
+    <div class="img-preview-item"
+         draggable="true"
+         ondragstart="dragStart(event,${i})"
+         ondragover="dragOver(event)"
+         ondrop="dragDrop(event,${i})"
+         ondragend="dragEnd(event)"
+         title="Перетащите для изменения порядка">
+      <img src="${img.dataUrl}" alt="${img.name}">
+      <button class="rm" onclick="removePreviewImg(${i})">✕</button>
+      <div class="drag-handle">⠿</div>
+    </div>`).join('');
+}
+
+function removePreviewImg(idx) {
+  pendingImages.splice(idx, 1);
+  renderImgPreviews();
+  updateLayoutRowVisibility();
+}
+
+// drag-to-reorder
+function dragStart(e, idx) {
+  dragSrcIdx = idx;
+  e.currentTarget.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function dragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function dragDrop(e, toIdx) {
+  e.preventDefault();
+  if (dragSrcIdx === null || dragSrcIdx === toIdx) return;
+  const moved = pendingImages.splice(dragSrcIdx, 1)[0];
+  pendingImages.splice(toIdx, 0, moved);
+  dragSrcIdx = null;
+  renderImgPreviews();
+}
+function dragEnd(e) { e.currentTarget.classList.remove('dragging'); dragSrcIdx = null; }
+
+// ── Form helpers ─────────────────────────────────────────
+function resetForm() {
+  editId = null;
+  pendingImages = [];
+  curLayout = 'row';
+  document.getElementById('form-title').textContent = 'Добавить проект';
+  document.getElementById('label-input').value = '';
+  document.getElementById('frame-toggle').checked = true;
+  document.getElementById('img-preview-list').innerHTML = '';
+  setLayout('row');
+  updateLayoutRowVisibility();
+}
+
+function editProject(id) {
+  const p = loadProjects().find(x => x.id === id);
+  if (!p) return;
+  editId = id;
+  document.getElementById('form-title').textContent = 'Редактировать проект';
+  document.getElementById('label-input').value = p.label || '';
+  document.getElementById('frame-toggle').checked = !!p.hasFrame;
+  pendingImages = (p.images || []).map((d, i) => ({ dataUrl: d, name: 'img_' + i }));
+  setLayout(p.layout || 'row');
+  renderImgPreviews();
+  updateLayoutRowVisibility();
+  document.getElementById('proj-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function deleteProject(id) {
+  if (!confirm('Удалить этот проект?')) return;
+  saveProjects(loadProjects().filter(p => p.id !== id));
+  renderProjList();
+  renderAll();
+}
+
+function saveProject() {
+  const label    = document.getElementById('label-input').value.trim();
+  const hasFrame = document.getElementById('frame-toggle').checked;
+
+  if (!pendingImages.length) { alert('Добавьте хотя бы одно изображение'); return; }
+
+  let projects = loadProjects();
+  const data = { label, hasFrame, layout: curLayout, images: pendingImages.map(i => i.dataUrl) };
+
+  if (editId) {
+    const idx = projects.findIndex(p => p.id === editId);
+    if (idx !== -1) projects[idx] = { ...projects[idx], ...data };
+  } else {
+    projects.push({ id: 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2), ...data });
+  }
+
+  saveProjects(projects);
+  adminClose();
+  resetForm();
+  renderAll();
+  // reopen to show updated list
+  setTimeout(() => { renderProjList(); document.getElementById('admin-overlay').classList.add('open'); }, 400);
+}
+
+// ────────────────────────────────────────────────────────
+//  INIT
+// ────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', renderAll);
+</script>
+
 </body>
 </html>
