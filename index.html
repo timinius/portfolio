@@ -552,6 +552,64 @@ header ul li {
 #resume-section span[style*="font-size:11.5px"] { font-size: 15.5px !important; }
 #resume-section span[style*="font-size:11px"]   { font-size: 15px !important; }
 #resume-section div[style*="font-size:10px"]    { font-size: 13px !important; }
+
+/* ══════════════════════════════════════════════════════
+   МОБИЛЬНАЯ АДАПТАЦИЯ  (≤ 768px)
+   Хиро и работы — масштабируются через JS (setMobileLayout)
+   Резюме — адаптивная вёрстка
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  html, body { overflow-x: hidden; }
+
+  /* Контейнер подстраивается под ширину экрана */
+  .canvas { width: 100%; }
+
+  /* Main: ширина 100%, padding-top задаётся JS-ом */
+  main { width: 100% !important; }
+
+  /* ── РЕЗЮМЕ: секция ──────────────────────────────── */
+  #resume-section                   { width: 100% !important; }
+  #resume-section > div:first-child { width: 100% !important; }
+  #works-heading                    { width: 100% !important; }
+
+  /* Заголовки секций — уменьшаем h2 и script */
+  #resume-section h2.t-druk,
+  #works-heading  h2.t-druk {
+    font-size:   22px !important;
+    line-height: 1.2  !important;
+    padding:     0 14px !important;
+    background:  rgba(18,19,22,1) !important;
+  }
+
+  #resume-section div.t-script,
+  #works-heading  div.t-script {
+    font-size:   64px !important;
+    line-height: 1.03 !important;
+  }
+
+  /* Градиентные линии по бокам заголовка */
+  .grad-l { left: 16px !important; width: calc(50% - 90px) !important; }
+  .grad-r { left: auto !important; right: 16px !important; width: calc(50% - 90px) !important; }
+
+  /* Двухколонная сетка резюме → одна колонка */
+  #resume-section div[style*="grid-template-columns"] {
+    display:        flex    !important;
+    flex-direction: column  !important;
+    width:   calc(100% - 32px) !important;
+    margin:  0 16px         !important;
+    gap:     20px           !important;
+  }
+
+  /* Шрифты в блоках резюме */
+  #resume-section p                               { font-size: 15px   !important; }
+  #resume-section span[style*="font-size:14px"]   { font-size: 15px   !important; }
+  #resume-section li[style*="font-size:12.5px"]   { font-size: 14px   !important; }
+  #resume-section span[style*="font-size:12px"]   { font-size: 13.5px !important; }
+  #resume-section span[style*="font-size:11.5px"] { font-size: 13px   !important; }
+  #resume-section span[style*="font-size:11px"]   { font-size: 13px   !important; }
+  #resume-section div[style*="font-size:10px"]    { font-size: 12px   !important; }
+}
 </style>
 </head>
 <body>
@@ -609,7 +667,7 @@ header ul li {
         <div class="grad-l" style="left:56px;top:62px;width:540px;"></div>
         <div class="grad-r" style="left:684px;top:62px;width:540px;"></div>
         <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;margin:0;padding:0 20px;">РЕЗЮМЕ</h2>
-        <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:3px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">резюме</div>
+        <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:30px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">резюме</div>
       </div>
 
       <!-- Основная сетка: 2 колонки -->
@@ -762,7 +820,7 @@ header ul li {
       <div class="grad-l" style="left:56px;top:62px;width:349px;"></div>
       <div class="grad-r" style="left:875px;top:62px;width:349px;"></div>
       <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;background:rgba(18,19,22,1);margin:0;padding:0 20px;">МОИ РАБОТЫ</h2>
-      <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:3px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">мои работы</div>
+      <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:30px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">мои работы</div>
     </div>
     <!-- /ЗАГОЛОВОК «МОИ РАБОТЫ» -->
 
@@ -1278,6 +1336,9 @@ function renderAll() {
     if (!imgs.length) userWithFrame.forEach(p => fitFrame(p.id));
     else imgs.forEach(img => { if (img.complete) check(); else { img.onload = check; img.onerror = check; } });
   }
+
+  // Пересчитываем мобильный масштаб после каждого рендера
+  if (typeof setMobileLayout === 'function') setMobileLayout();
 }
 
 // ════════════════════════════════════════════════════════
@@ -1473,9 +1534,57 @@ function saveProject() {
 // ════════════════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════════════════
+// ── Мобильное масштабирование ────────────────────────────
+// Хиро и figure.work масштабируются пропорционально экрану.
+// Вся визуальная идентика (фото, декоры, SVG) сохраняется —
+// контент просто уменьшается через CSS zoom.
+function setMobileLayout() {
+  const vw     = window.innerWidth;
+  const hdr    = document.querySelector('header');
+  const mainEl = document.querySelector('main');
+  const figs   = document.querySelectorAll('figure.work');
+
+  if (vw <= 768) {
+    const s = vw / 1280; // пропорциональный масштаб
+
+    // Хиро: zoom + сдвигаем top так, чтобы видимая зона начиналась
+    // с canvas_y = 0.  Формула: top = -319 * s  (т.к. hero_content
+    // начинается с element_y = 319px внутри header)
+    hdr.style.zoom = s;
+    hdr.style.top  = Math.round(-319 * s) + 'px';
+    hdr.style.left = Math.round(29  * s) + 'px';
+
+    // Отступ main = высота видимой зоны хиро × масштаб
+    mainEl.style.paddingTop = Math.round(618 * s) + 'px';
+
+    // Работы: уменьшаем до ширины экрана, прижимаем к левому краю
+    figs.forEach(fig => {
+      if (!fig.dataset.origLeft) fig.dataset.origLeft = fig.style.left || '0px';
+      fig.style.zoom = s;
+      fig.style.left = '0px';
+    });
+
+  } else {
+    // Восстанавливаем десктоп-значения (inline-атрибуты header/main
+    // сохранены в HTML и вернутся после сброса JS-перезаписи)
+    hdr.style.zoom       = '';
+    hdr.style.top        = '';
+    hdr.style.left       = '';
+    mainEl.style.paddingTop = '';
+
+    figs.forEach(fig => {
+      fig.style.zoom = '';
+      if (fig.dataset.origLeft) fig.style.left = fig.dataset.origLeft;
+    });
+  }
+}
+
+window.addEventListener('resize', setMobileLayout);
+
 document.addEventListener('DOMContentLoaded', () => {
   extractOrigMeta();
   renderAll();
+  setMobileLayout();
 });
 
 document.addEventListener('keydown', e => {
