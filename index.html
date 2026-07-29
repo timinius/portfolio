@@ -1244,10 +1244,9 @@ function extractOrigMeta() {
     fig.dataset.workId = id;
 
     // Convert from absolute to flow
-    fig.style.position    = 'relative';
-    fig.style.top         = '';
-    fig.style.left        = fig.style.left || '0px';
-    fig.style.marginBottom = '30px';
+    fig.style.position = 'relative';
+    fig.style.top      = '';
+    fig.style.left     = fig.style.left || '0px'; // keep horizontal offset
 
     // thumbnail: first img-bg background-image or first <img>
     let thumbUrl = '';
@@ -1303,7 +1302,6 @@ function renderAll() {
       const el = document.createElement('div');
       el.className = 'user-project';
       el.dataset.workId = p.id;
-      el.style.marginBottom = '30px';
       const imgs = p.images || [];
       const imgsHtml = buildImgsHtml(imgs, p.layout || 'row');
       const frameOverlay = p.hasFrame
