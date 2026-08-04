@@ -235,6 +235,71 @@ body { background: rgb(18,19,22,1.000); }
   letter-spacing: .04em;
 }
 
+/* publish (GitHub) section */
+#publish-section {
+  background: rgba(154,128,86,0.08);
+  border: 1px solid rgba(154,128,86,0.25);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+#publish-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+#publish-row-top span {
+  font-size: 12px;
+  color: rgba(220,196,140,.9);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.publish-token-toggle {
+  background: none;
+  border: none;
+  color: rgba(200,200,200,.5);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+.publish-token-toggle:hover { color: rgba(220,196,140,.9); }
+#gh-token-row {
+  display: none;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+#gh-token-row.open { display: flex; }
+#gh-token-row input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #e0ddd5;
+  font-family: 'Helvetica', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+#gh-token-row input:focus { border-color: rgba(154,128,86,.6); }
+#gh-token-hint {
+  display: none;
+  font-size: 11px;
+  color: rgba(200,200,200,.4);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+#gh-token-hint.open { display: block; }
+#publish-row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+#publish-row-bottom .btn-primary { flex: none; padding: 10px 20px; }
+#publish-status { font-size: 12px; color: rgba(200,200,200,.6); }
+
 /* form */
 #proj-form { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; }
 #proj-form h3 {
@@ -1069,6 +1134,22 @@ figure.work {
     <button class="close-btn" onclick="adminClose()">✕</button>
     <h2>Управление проектами</h2>
 
+    <div id="publish-section">
+      <div id="publish-row-top">
+        <span>Публикация на сайт</span>
+        <button type="button" class="publish-token-toggle" onclick="toggleGhTokenRow()">токен</button>
+      </div>
+      <div id="gh-token-row">
+        <input type="password" id="gh-token-input" placeholder="GitHub personal access token">
+        <button type="button" class="btn-cancel" onclick="saveGhTokenFromInput()">Сохранить</button>
+      </div>
+      <div id="gh-token-hint">Fine-grained токен с доступом Contents: Read and write только к репозиторию portfolio. Хранится в этом браузере.</div>
+      <div id="publish-row-bottom">
+        <button type="button" class="btn-primary" id="publish-btn" onclick="publishNow()">Опубликовать на сайт</button>
+        <span id="publish-status"></span>
+      </div>
+    </div>
+
     <div id="proj-list-header" style="display:none;">
       <span id="proj-list-count"></span>
       <span>перетащите для сортировки</span>
@@ -1180,6 +1261,124 @@ function loadOrder() {
   catch { return null; }
 }
 function saveOrder(arr) { localStorage.setItem('portfolio_order', JSON.stringify(arr)); }
+
+// ════════════════════════════════════════════════════════
+//  GITHUB PUBLISH — данные, добавленные через панель, живут в
+//  data/projects.json в репозитории. Обычные посетители просто
+//  читают этот файл (fetchRemoteData). Публикация (запись) идёт
+//  через GitHub REST API и требует personal access token —
+//  токен хранится только в localStorage этого браузера.
+// ════════════════════════════════════════════════════════
+const GH_OWNER  = 'timinius';
+const GH_REPO   = 'portfolio';
+const GH_BRANCH = 'Фикс';
+const GH_PATH   = 'data/projects.json';
+
+function getGhToken() { return localStorage.getItem('portfolio_gh_token') || ''; }
+function setGhToken(t) {
+  if (t) localStorage.setItem('portfolio_gh_token', t);
+  else localStorage.removeItem('portfolio_gh_token');
+}
+
+function utf8ToBase64(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = '';
+  bytes.forEach(b => { binary += String.fromCharCode(b); });
+  return btoa(binary);
+}
+
+// Подтягиваем опубликованные работы с сайта и кладём в localStorage,
+// чтобы вся остальная (синхронная) логика панели не менялась.
+// Если файла ещё нет или мы открыты локально по file:// (fetch туда
+// не работает из-за CORS) — тихо остаёмся на том, что уже в кэше.
+async function fetchRemoteData() {
+  try {
+    const res = await fetch('./' + GH_PATH, { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    localStorage.setItem('portfolio_projects', JSON.stringify(data.projects || []));
+    localStorage.setItem('portfolio_order', JSON.stringify(data.order || null));
+  } catch (e) {
+    // офлайн / локальный file:// / файла ещё нет — используем локальный кэш как есть
+  }
+}
+
+// Публикует ТЕКУЩЕЕ состояние (localStorage) в data/projects.json
+// репозитория одним коммитом через GitHub Contents API.
+async function publishToGithub() {
+  const token = getGhToken();
+  if (!token) throw new Error('сначала вставьте токен');
+
+  const apiUrl  = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+  const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' };
+
+  let sha = null;
+  const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(GH_BRANCH)}`, { headers });
+  if (getRes.status === 200) {
+    sha = (await getRes.json()).sha;
+  } else if (getRes.status !== 404) {
+    const err = await getRes.json().catch(() => ({}));
+    throw new Error(`не удалось прочитать файл (${getRes.status}) ${err.message || ''}`);
+  }
+
+  const payload = { order: getOrder(), projects: loadProjects() };
+  const body = {
+    message: 'Обновление работ через админ-панель',
+    content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+    branch: GH_BRANCH,
+  };
+  if (sha) body.sha = sha;
+
+  const putRes = await fetch(apiUrl, {
+    method: 'PUT',
+    headers: { ...headers, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    throw new Error(`ошибка публикации (${putRes.status}) ${err.message || ''}`);
+  }
+}
+
+function toggleGhTokenRow() {
+  const row  = document.getElementById('gh-token-row');
+  const hint = document.getElementById('gh-token-hint');
+  const open = row.classList.toggle('open');
+  hint.classList.toggle('open', open);
+  if (open) document.getElementById('gh-token-input').value = getGhToken();
+}
+
+function saveGhTokenFromInput() {
+  const val = document.getElementById('gh-token-input').value.trim();
+  setGhToken(val);
+  const statusEl = document.getElementById('publish-status');
+  statusEl.textContent = val ? 'Токен сохранён' : 'Токен удалён';
+  statusEl.style.color = 'rgba(200,200,200,.6)';
+}
+
+async function publishNow() {
+  const statusEl = document.getElementById('publish-status');
+  const btn      = document.getElementById('publish-btn');
+  if (!getGhToken()) {
+    toggleGhTokenRow();
+    statusEl.textContent = 'Сначала вставьте токен';
+    statusEl.style.color = 'rgba(220,150,90,.9)';
+    return;
+  }
+  btn.disabled = true;
+  statusEl.textContent = 'Публикация…';
+  statusEl.style.color = 'rgba(200,200,200,.6)';
+  try {
+    await publishToGithub();
+    statusEl.textContent = 'Опубликовано ✓ (на сайте появится примерно через минуту)';
+    statusEl.style.color = 'rgba(140,200,140,.9)';
+  } catch (e) {
+    statusEl.textContent = 'Ошибка: ' + e.message;
+    statusEl.style.color = 'rgba(220,120,120,.9)';
+  } finally {
+    btn.disabled = false;
+  }
+}
 
 // ════════════════════════════════════════════════════════
 //  LAYOUT HELPERS
@@ -1596,8 +1795,9 @@ function setMobileLayout() {
 
 window.addEventListener('resize', setMobileLayout);
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   extractOrigMeta();
+  await fetchRemoteData();
   renderAll();
   setMobileLayout();
 });
