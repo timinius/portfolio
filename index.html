@@ -463,6 +463,12 @@ body { background: rgb(18,19,22,1.000); }
   opacity: 0.5;
 }
 
+/* ── Оранжевая закорючка вокруг хиро-портрета (3 элемента,
+   2 позади фото + 1 перед ним) — двигать/масштабировать как единое
+   целое, меняя только эти два правила ── */
+.squiggle-outer { position: absolute; left: 60px; top: -421px; }
+.squiggle-inner { position: relative; zoom: 0.86; }
+
 /* ── Typography ───────────────────────────────────────── */
 
 .t-druk {
@@ -603,27 +609,35 @@ figure.work {
   <!-- ═══ HERO + ОБО МНЕ ═══════════════════════════════ -->
   <header style="position:relative;width:2979px;height:652.9991455078125px;">
 
-    <img src="./assets/1-868.svg" style="position:absolute;left:-190px;top:110px;width:2400px;height:450px;opacity:0.9;" alt="" role="presentation">
+    <img src="./assets/1-868.svg" style="position:absolute;left:-1056px;top:110px;width:2400px;height:450px;opacity:0.9;transform:scaleX(-1);" alt="" role="presentation">
 
-    <h1 class="t-druk" style="position:absolute;left:38px;top:119px;width:806px;height:191px;font-size:85.33px;line-height:87.95px;text-align:left;">Смирнов Никита</h1>
+    <h1 class="t-druk" style="position:absolute;left:671px;top:119px;width:806px;height:191px;font-size:74px;line-height:76.3px;text-align:left;">Смирнов Никита</h1>
 
-    <ul class="t-stem" style="position:absolute;left:52px;top:311px;width:720px;height:542px;font-size:35.62px;font-weight:300;line-height:40.3px;text-align:left;list-style:none;display:flex;flex-direction:column;gap:6px;">
-      <li>- Графический дизайн</li>
-      <li>- Оформление соцсетей</li>
-      <li>- Векторная графика</li>
-      <li>- Фотомонтаж</li>
-      <li>- UX/UI</li>
+    <ul class="t-stem" style="position:absolute;left:641px;top:311px;width:720px;height:542px;font-size:35.62px;font-weight:300;line-height:40.3px;text-align:left;list-style:none;display:flex;flex-direction:column;gap:6px;">
+      <li style="position:relative;padding-left:30px;">Графический дизайн<span style="position:absolute;left:12px;top:0;">•</span></li>
+      <li style="position:relative;padding-left:30px;">Оформление соцсетей<span style="position:absolute;left:12px;top:0;">•</span></li>
+      <li style="position:relative;padding-left:30px;">Векторная графика<span style="position:absolute;left:12px;top:0;">•</span></li>
+      <li style="position:relative;padding-left:30px;">Фотомонтаж<span style="position:absolute;left:12px;top:0;">•</span></li>
+      <li style="position:relative;padding-left:30px;">UX/UI<span style="position:absolute;left:12px;top:0;">•</span></li>
     </ul>
-    <div style="position:absolute; width: 200px;height: 200px;background: rgb(201, 92, 19);left:815px;top:319px;border-radius: 50%;filter: blur(130px);opacity: 0.9;"></div>
-    
-    <img src="./assets/1-876.svg" style="position:absolute;left:618px;top:-441px;width:606px;height:1164px;" alt="" role="presentation">
-    <img src="./assets/1-878.svg" style="position:absolute;left:656px;top:-423px;width:549px;height:1211px;" alt="" role="presentation">
-    <img src="./assets/1-880.png" style="position:absolute;left:600px;top:10px;width:626px;height:839px;" alt="Портрет дизайнера Смирнова Никиты">
-    <img src="./assets/1-885.png" style="position:absolute;left:651px;top:39px;width:507px;height:759px;" alt="" role="presentation">
+    <div style="position:absolute; width: 200px;height: 200px;background: rgb(201, 92, 19);left:279px;top:319px;border-radius: 50%;filter: blur(130px);opacity: 0.9;"></div>
 
-    <div class="blur-circle" style="left:810px;top:306px;width:35px;height:42px;mix-blend-mode:soft-light;filter:blur(42px);background:rgba(255,255,255,1.000);"></div>
-    <div class="blur-circle" style="opacity:0.75;left:849px;top:372px;width:98.4px;height:239.4px;mix-blend-mode:overlay;filter:blur(42px);background:rgba(255,255,255,1.000);"></div>
-    <div class="blur-circle" style="opacity:0.75;left:833px;top:397px;width:116px;height:90px;mix-blend-mode:overlay;filter:blur(63px);background:rgba(255,255,255,0.510);"></div>
+    <!-- закорючка: сегменты позади портрета -->
+    <div class="squiggle-outer"><div class="squiggle-inner">
+      <img src="./assets/1-876.svg" style="position:absolute;left:72px;top:0px;width:606px;height:1164px;" alt="" role="presentation">
+      <img src="./assets/1-878.svg" style="position:absolute;left:110px;top:18px;width:549px;height:1211px;" alt="" role="presentation">
+    </div></div>
+
+    <img src="./assets/1-880.png" style="position:absolute;left:64px;top:10px;width:626px;height:839px;" alt="Портрет дизайнера Смирнова Никиты">
+
+    <!-- закорючка: сегмент перед портретом -->
+    <div class="squiggle-outer"><div class="squiggle-inner">
+      <img src="./assets/1-885.png" style="position:absolute;left:105px;top:480px;width:507px;height:759px;" alt="" role="presentation">
+    </div></div>
+
+    <div class="blur-circle" style="left:274px;top:306px;width:35px;height:42px;mix-blend-mode:soft-light;filter:blur(42px);background:rgba(255,255,255,1.000);"></div>
+    <div class="blur-circle" style="opacity:0.75;left:313px;top:372px;width:98.4px;height:239.4px;mix-blend-mode:overlay;filter:blur(42px);background:rgba(255,255,255,1.000);"></div>
+    <div class="blur-circle" style="opacity:0.75;left:297px;top:397px;width:116px;height:90px;mix-blend-mode:overlay;filter:blur(63px);background:rgba(255,255,255,0.510);"></div>
 
 
   </header>
@@ -1525,7 +1539,9 @@ function saveProject() {
 // печатного и курсивного слоя в заголовках) сохраняется — контент
 // просто уменьшается через CSS zoom, порядок работ не меняется.
 function setMobileLayout() {
-  const vw       = window.innerWidth;
+  // clientWidth (not innerWidth) — совпадает с шириной, которую реально
+  // получает .canvas{width:100%}, т.к. не включает полосу прокрутки
+  const vw       = document.documentElement.clientWidth;
   const hdr      = document.querySelector('header');
   const figs     = document.querySelectorAll('figure.work');
   const headings = [
