@@ -538,11 +538,11 @@ figure.work {
 #resume-section div[style*="font-size:10px"]    { font-size: 13px !important; }
 
 /* ══════════════════════════════════════════════════════
-   МОБИЛЬНАЯ АДАПТАЦИЯ  (≤ 768px)
+   АДАПТИВНАЯ ВЁРСТКА  (< 1280px — уже уже родного канваса)
    Хиро и работы — масштабируются через JS (setMobileLayout)
-   Резюме — адаптивная вёрстка
+   Резюме — адаптивная вёрстка, два подуровня: планшет / телефон
    ══════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
+@media (max-width: 1279px) {
 
   html, body { overflow-x: hidden; }
 
@@ -552,31 +552,32 @@ figure.work {
   /* Main: ширина 100%, padding-top задаётся JS-ом */
   main { width: 100% !important; }
 
+  /* На узких экранах подписи работ становятся нечитаемыми при
+     уменьшении масштаба — проще скрыть их, чем подгонять размер */
+  figure.work .work-label {
+    display: none !important;
+  }
+
   /* ── РЕЗЮМЕ: секция ──────────────────────────────── */
-  #resume-section                   { width: 100% !important; }
-  #resume-section > div:first-child { width: 100% !important; }
-  #works-heading                    { width: 100% !important; }
+  #resume-section { width: 100% !important; }
 
-  /* Заголовки секций — уменьшаем h2 и script */
-  #resume-section h2.t-druk,
-  #works-heading  h2.t-druk {
-    font-size:   22px !important;
-    line-height: 1.2  !important;
-    padding:     0 14px !important;
-    background:  rgba(18,19,22,1) !important;
+  /* Заголовки «РЕЗЮМЕ» и «МОИ РАБОТЫ» (печатный + курсивный слой)
+     масштабируются как единый блок через JS zoom (setMobileLayout),
+     чтобы курсив и надпись никогда не съезжали друг относительно друга */
+
+  /* Сетка резюме остаётся двухколоночной на планшетах, но становится резиновой */
+  #resume-section div[style*="grid-template-columns"] {
+    width:  calc(100% - 64px) !important;
+    margin: 0 32px            !important;
   }
 
-  #resume-section div.t-script,
-  #works-heading  div.t-script {
-    font-size:   64px !important;
-    line-height: 1.03 !important;
-  }
+  /* Админ-панель не должна вылезать за пределы узкого экрана */
+  #admin-panel { width: calc(100vw - 32px); }
+}
 
-  /* Градиентные линии по бокам заголовка */
-  .grad-l { left: 16px !important; width: calc(50% - 90px) !important; }
-  .grad-r { left: auto !important; right: 16px !important; width: calc(50% - 90px) !important; }
+@media (max-width: 899px) {
 
-  /* Двухколонная сетка резюме → одна колонка */
+  /* Двухколонная сетка резюме → одна колонка (на телефонах и узких планшетах) */
   #resume-section div[style*="grid-template-columns"] {
     display:        flex    !important;
     flex-direction: column  !important;
@@ -788,7 +789,7 @@ figure.work {
 
 
   <!-- ═══ РАБОТЫ / ПОРТФОЛИО ════════════════════════════ -->
-  <main style="position:relative;width:1280px;padding-top:618px;" aria-label="Портфолио">
+  <main style="position:relative;width:1280px;" aria-label="Портфолио">
 
     <!-- ЗАГОЛОВОК «МОИ РАБОТЫ» (flow, после резюме) -->
     <div id="works-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:50px;">
@@ -1517,47 +1518,63 @@ function saveProject() {
 //  INIT
 // ════════════════════════════════════════════════════════
 // ── Мобильное масштабирование ────────────────────────────
-// Хиро и figure.work масштабируются пропорционально экрану.
-// Вся визуальная идентика (фото, декоры, SVG) сохраняется —
-// контент просто уменьшается через CSS zoom.
+// Хиро, работы и заголовки секций масштабируются пропорционально
+// экрану (для любой ширины меньше родного канваса 1280px, включая
+// планшеты и нераспахнутые окна браузера — не только телефоны).
+// Вся визуальная идентика (фото, декоры, SVG, взаимное расположение
+// печатного и курсивного слоя в заголовках) сохраняется — контент
+// просто уменьшается через CSS zoom, порядок работ не меняется.
 function setMobileLayout() {
-  const vw     = window.innerWidth;
-  const hdr    = document.querySelector('header');
-  const mainEl = document.querySelector('main');
-  const figs   = document.querySelectorAll('figure.work');
+  const vw       = window.innerWidth;
+  const hdr      = document.querySelector('header');
+  const figs     = document.querySelectorAll('figure.work');
+  const headings = [
+    document.querySelector('#resume-section > div:first-child'),
+    document.getElementById('works-heading'),
+  ].filter(Boolean);
 
-  if (vw <= 768) {
+  if (vw < 1280) {
     const s = vw / 1280; // пропорциональный масштаб
 
-    // Хиро: zoom + сдвигаем top так, чтобы видимая зона начиналась
-    // с canvas_y = 0.  Формула: top = -319 * s  (т.к. hero_content
-    // начинается с element_y = 319px внутри header)
+    // Хиро: zoom + сдвигаем top/left так, чтобы видимая зона начиналась
+    // с canvas_y = 0. zoom сам пропорционально масштабирует top/left
+    // зумленного элемента, поэтому значения здесь — оригинальные
+    // (немасштабированные) координаты внутри header, домножать на s
+    // вручную не нужно (иначе получается двойное масштабирование,
+    // и линия обрезки «плывёт» в зависимости от ширины экрана).
     hdr.style.zoom = s;
-    hdr.style.top  = Math.round(-319 * s) + 'px';
-    hdr.style.left = Math.round(29  * s) + 'px';
+    hdr.style.top  = '-100px';
+    hdr.style.left = '29px';
 
-    // Отступ main = высота видимой зоны хиро × масштаб
-    mainEl.style.paddingTop = Math.round(618 * s) + 'px';
-
-    // Работы: уменьшаем до ширины экрана, прижимаем к левому краю
+    // Работы: уменьшаем масштаб, но сохраняем исходное центрирование
+    // (у каждой работы свой отступ left, рассчитанный под её ширину).
+    // zoom сам пропорционально масштабирует left зумленного элемента,
+    // поэтому здесь возвращаем оригинальное (немасштабированное) значение —
+    // домножать вручную ещё раз не нужно.
     figs.forEach(fig => {
       if (!fig.dataset.origLeft) fig.dataset.origLeft = fig.style.left || '0px';
       fig.style.zoom = s;
-      fig.style.left = '0px';
+      fig.style.left = fig.dataset.origLeft;
     });
 
+    // Заголовки «РЕЗЮМЕ» / «МОИ РАБОТЫ»: zoom всего блока целиком,
+    // поэтому курсивный и печатный слой всегда остаются в одном
+    // и том же положении друг относительно друга
+    headings.forEach(h => { h.style.zoom = s; });
+
   } else {
-    // Восстанавливаем десктоп-значения (inline-атрибуты header/main
+    // Восстанавливаем десктоп-значения (инлайн-атрибуты header
     // сохранены в HTML и вернутся после сброса JS-перезаписи)
     hdr.style.zoom       = '';
     hdr.style.top        = '';
     hdr.style.left       = '';
-    mainEl.style.paddingTop = '';
 
     figs.forEach(fig => {
       fig.style.zoom = '';
       if (fig.dataset.origLeft) fig.style.left = fig.dataset.origLeft;
     });
+
+    headings.forEach(h => { h.style.zoom = ''; });
   }
 }
 
