@@ -6,11 +6,6 @@
 <title>Портфолио — Смирнов Никита</title>
 <style>
 
-ul li {
-  margin-bottom: -75px;
-
-}
-
 @font-face {
   font-family: 'Druk Text Wide';
   src: url('./assets/DrukTextWide-Super.ttf') format('truetype');
@@ -54,12 +49,6 @@ body { background: rgb(18,19,22,1.000); }
   background: rgba(18,19,22,1.000);
   overflow: hidden;
   margin: 0 auto;
-}
-
-/* ── Works flow ───────────────────────────────────────── */
-figure.work {
-  margin-bottom: 30px;
-  flex-shrink: 0;
 }
 
 /* ── User-added projects ──────────────────────────────── */
@@ -115,7 +104,6 @@ figure.work {
   background: rgba(154,128,86,0.9);
   border: none;
   cursor: pointer;
-  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9000;
@@ -311,7 +299,11 @@ figure.work {
   position: relative;
   width: 80px;
   height: 60px;
+  cursor: grab;
+  user-select: none;
 }
+.img-preview-item:active { cursor: grabbing; }
+.img-preview-item.dragging { opacity: .4; }
 .img-preview-item img {
   width: 80px;
   height: 60px;
@@ -429,12 +421,6 @@ figure.work {
 }
 
 /* ── Drag-reorder previews ────────────────────────────── */
-.img-preview-item {
-  cursor: grab;
-  user-select: none;
-}
-.img-preview-item:active { cursor: grabbing; }
-.img-preview-item.dragging { opacity: .4; }
 .drag-handle {
   position: absolute;
   bottom: 4px;
@@ -540,11 +526,6 @@ figure.work {
 figure.work {
   position: absolute;
   margin: 0;
-}
-
-#resume-section ul li,
-header ul li {
-  margin-bottom: 0;
 }
 
 /* ── Resume — увеличенные размеры текста ─────────────── */
@@ -808,9 +789,6 @@ header ul li {
 
   <!-- ═══ РАБОТЫ / ПОРТФОЛИО ════════════════════════════ -->
   <main style="position:relative;width:1280px;padding-top:618px;" aria-label="Портфолио">
-
-    <!-- БЛОК РЕЗЮМЕ -->
-    <!-- /БЛОК РЕЗЮМЕ -->
 
     <!-- ЗАГОЛОВОК «МОИ РАБОТЫ» (flow, после резюме) -->
     <div id="works-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:50px;">
@@ -1198,6 +1176,12 @@ function setLayout(l) {
   document.querySelectorAll('.layout-btn').forEach(b => b.classList.toggle('active', b.dataset.layout === l));
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str ?? '';
+  return div.innerHTML;
+}
+
 function buildImgsHtml(imgs, layout) {
   if (!imgs.length) return '';
   if (imgs.length === 1)
@@ -1308,7 +1292,7 @@ function renderAll() {
         ? `<div class="user-project__frame" id="frame_${p.id}">${gradientSVG(600, 400, 'g_' + p.id)}</div>`
         : '';
       el.innerHTML = `<div class="user-project__img-wrap">${imgsHtml}${frameOverlay}</div>
-        ${p.label ? `<div class="user-project__label">${p.label}</div>` : ''}`;
+        ${p.label ? `<div class="user-project__label">${escapeHtml(p.label)}</div>` : ''}`;
       main.appendChild(el);
     }
   });
@@ -1393,7 +1377,7 @@ function renderProjList() {
       <span class="proj-item__drag">⠿</span>
       ${thumb}
       <div class="proj-item__info">
-        <div class="proj-item__name">${name}</div>
+        <div class="proj-item__name">${escapeHtml(name)}</div>
         <div class="proj-item__meta">${metaStr}</div>
       </div>
       ${editBtn}${delBtn}
