@@ -52,7 +52,8 @@ body { background: rgb(18,19,22,1.000); }
 /* ── User-added projects ──────────────────────────────── */
 .user-project {
   position: relative;
-  margin-bottom: 30px;
+  max-width: 1195px;
+  margin: 0 auto 30px;
 }
 .user-project__img-wrap {
   position: relative;
@@ -153,6 +154,7 @@ body { background: rgb(18,19,22,1.000); }
 #admin-panel .close-btn:hover { color: #fff; }
 
 /* project list */
+#proj-list-header { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; margin-top: 24px; }
 #proj-list { margin-bottom: 28px; }
 .proj-item {
   display: flex;
@@ -1150,12 +1152,6 @@ figure.work {
       </div>
     </div>
 
-    <div id="proj-list-header" style="display:none;">
-      <span id="proj-list-count"></span>
-      <span>перетащите для сортировки</span>
-    </div>
-    <div id="proj-list"></div>
-
     <div id="proj-form">
       <h3 id="form-title">Добавить проект</h3>
 
@@ -1208,6 +1204,12 @@ figure.work {
         <button class="btn-cancel" onclick="resetForm()">Очистить</button>
       </div>
     </div>
+
+    <div id="proj-list-header" style="display:none;">
+      <span id="proj-list-count"></span>
+      <span>перетащите для сортировки</span>
+    </div>
+    <div id="proj-list"></div>
   </div>
 </div>
 
@@ -1238,18 +1240,53 @@ function saveProjects(arr) {
   }
 }
 
+// Находит прямоугольник непрозрачных пикселей — чтобы обрезать
+// пустые прозрачные поля у PNG (иначе отступы сверху/снизу считаются
+// от края файла, а не от видимой картинки).
+function trimTransparentBounds(ctx, w, h) {
+  const { data } = ctx.getImageData(0, 0, w, h);
+  const alphaThreshold = 8; // игнорируем почти невидимый шум/сглаживание
+  let minX = w, minY = h, maxX = -1, maxY = -1;
+  for (let y = 0; y < h; y++) {
+    const rowOffset = y * w;
+    for (let x = 0; x < w; x++) {
+      if (data[(rowOffset + x) * 4 + 3] > alphaThreshold) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (maxX === -1) return null; // изображение полностью прозрачное
+  return { left: minX, top: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
+}
+
 // Сжать изображение до maxW px по ширине и JPEG quality
-function compressImage(dataUrl, maxW = 1400, quality = 0.82) {
+// (для PNG предварительно обрезает прозрачные поля по краям)
+function compressImage(dataUrl, isPng, maxW = 1400, quality = 0.82) {
   return new Promise(res => {
     const img = new Image();
     img.onload = () => {
-      const scale = Math.min(1, maxW / img.width);
-      const w = Math.round(img.width  * scale);
-      const h = Math.round(img.height * scale);
+      let sx = 0, sy = 0, sw = img.width, sh = img.height;
+
+      if (isPng) {
+        const probe = document.createElement('canvas');
+        probe.width = img.width; probe.height = img.height;
+        const pctx = probe.getContext('2d');
+        pctx.drawImage(img, 0, 0);
+        const trimmed = trimTransparentBounds(pctx, img.width, img.height);
+        if (trimmed) { sx = trimmed.left; sy = trimmed.top; sw = trimmed.width; sh = trimmed.height; }
+      }
+
+      const scale = Math.min(1, maxW / sw);
+      const w = Math.round(sw * scale);
+      const h = Math.round(sh * scale);
       const c = document.createElement('canvas');
       c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
-      res(c.toDataURL('image/jpeg', quality));
+      c.getContext('2d').drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
+      // PNG сохраняем как PNG — иначе прозрачность конвертится в чёрный фон при JPEG
+      res(isPng ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', quality));
     };
     img.src = dataUrl;
   });
@@ -1626,7 +1663,7 @@ function onImgSelect(e) {
   const files = Array.from(e.target.files);
   Promise.all(files.map(f => new Promise(res => {
     const r = new FileReader();
-    r.onload = ev => compressImage(ev.target.result).then(dataUrl => res({ dataUrl, name: f.name }));
+    r.onload = ev => compressImage(ev.target.result, f.type === 'image/png').then(dataUrl => res({ dataUrl, name: f.name }));
     r.readAsDataURL(f);
   }))).then(results => {
     pendingImages = pendingImages.concat(results);
