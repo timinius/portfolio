@@ -1451,7 +1451,10 @@ function buildImgsHtml(imgs, layout) {
   const gap = 10, r = 12;
   const eff = (imgs.length === 2 && layout === 'stack') ? 'row' : layout;
   if (eff === 'row')
-    return `<div style="display:flex;gap:${gap}px;align-items:flex-start;">${imgs.map(s=>`<img src="${s}" alt="" style="flex:1 1 0;min-width:0;width:0;height:auto;border-radius:${r}px;display:block;">`).join('')}</div>`;
+    // высота у всех фото в ряду одинаковая, ширина каждого — по его
+    // собственным пропорциям (flex-grow проставляется в fitRowImages
+    // после загрузки картинок, когда известны их natural-размеры)
+    return `<div class="row-imgs" style="display:flex;gap:${gap}px;align-items:stretch;">${imgs.map(s=>`<img src="${s}" alt="" class="row-img" style="flex:0 1 auto;min-width:0;width:auto;height:auto;max-width:100%;border-radius:${r}px;display:block;">`).join('')}</div>`;
   if (eff === 'grid') {
     const cols = imgs.length === 3 ? 3 : 2;
     return `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px;">${imgs.map(s=>`<img src="${s}" alt="" style="width:100%;height:auto;border-radius:${r}px;display:block;">`).join('')}</div>`;
@@ -1581,8 +1584,29 @@ function renderAll() {
     else imgs.forEach(img => { if (img.complete) check(); else { img.onload = check; img.onerror = check; } });
   }
 
+  // Ряды фото: одинаковая высота, ширина каждого — по своим пропорциям
+  fitRowImages(main);
+
   // Пересчитываем мобильный масштаб после каждого рендера
   if (typeof setMobileLayout === 'function') setMobileLayout();
+}
+
+// Проставляет каждой картинке в раскладке «в ряд» flex-grow, равный
+// её натуральному соотношению сторон (width/height). При flex-basis:0
+// и height:auto это математически даёт всем картинкам в ряду одну и
+// ту же итоговую высоту, а ширина у каждой — своя, по пропорциям.
+function fitRowImages(scopeEl) {
+  scopeEl.querySelectorAll('.row-imgs').forEach(row => {
+    const imgs = Array.from(row.querySelectorAll('.row-img'));
+    if (!imgs.length) return;
+    const apply = () => {
+      if (!imgs.every(im => im.complete && im.naturalWidth)) return;
+      imgs.forEach(im => {
+        im.style.flex = (im.naturalWidth / im.naturalHeight).toFixed(4) + ' 1 0';
+      });
+    };
+    imgs.forEach(im => { if (im.complete) apply(); else { im.onload = apply; im.onerror = apply; } });
+  });
 }
 
 // ════════════════════════════════════════════════════════
