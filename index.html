@@ -1249,30 +1249,30 @@ let dragSrcIdx    = null;
 let listDragSrc   = null;
 
 // ── projects (user-added) ────────────────────────────────
-function loadProjects() {
-  try { return JSON.parse(localStorage.getItem('portfolio_projects') || '[]'); }
-  catch { return []; }
-}
-function saveProjects(arr) {
-  try {
-    localStorage.setItem('portfolio_projects', JSON.stringify(arr));
-  } catch(e) {
-    alert('Не удалось сохранить: изображения слишком большие. Попробуй уменьшить их перед загрузкой.');
-    throw e;
-  }
-}
+// Храним в памяти, а не в localStorage — с фото в base64 легко
+// упереться в лимит localStorage (~5-10 МБ на весь сайт). Черновик
+// живёт, пока открыта вкладка; при перезагрузке (как и раньше)
+// страница подтянет актуальное опубликованное состояние из GitHub —
+// см. fetchRemoteData.
+let projectsCache = [];
+function loadProjects() { return projectsCache; }
+function saveProjects(arr) { projectsCache = arr; }
 
-// Находит прямоугольник непрозрачных пикселей — чтобы обрезать
-// пустые прозрачные поля у PNG (иначе отступы сверху/снизу считаются
-// от края файла, а не от видимой картинки).
-function trimTransparentBounds(ctx, w, h) {
+// Проверяет альфа-канал PNG: есть ли реальная прозрачность, и если да —
+// прямоугольник непрозрачных пикселей (чтобы обрезать пустые прозрачные
+// поля по краям — иначе отступы считаются от края файла, а не от
+// видимой картинки). Один проход по пикселям на оба вопроса сразу.
+function analyzePngAlpha(ctx, w, h) {
   const { data } = ctx.getImageData(0, 0, w, h);
   const alphaThreshold = 8; // игнорируем почти невидимый шум/сглаживание
   let minX = w, minY = h, maxX = -1, maxY = -1;
+  let hasTransparency = false;
   for (let y = 0; y < h; y++) {
     const rowOffset = y * w;
     for (let x = 0; x < w; x++) {
-      if (data[(rowOffset + x) * 4 + 3] > alphaThreshold) {
+      const a = data[(rowOffset + x) * 4 + 3];
+      if (a < 255) hasTransparency = true;
+      if (a > alphaThreshold) {
         if (x < minX) minX = x;
         if (x > maxX) maxX = x;
         if (y < minY) minY = y;
@@ -1280,25 +1280,30 @@ function trimTransparentBounds(ctx, w, h) {
       }
     }
   }
-  if (maxX === -1) return null; // изображение полностью прозрачное
-  return { left: minX, top: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
+  const bounds = maxX === -1 ? null : { left: minX, top: minY, width: maxX - minX + 1, height: maxY - minY + 1 };
+  return { bounds, hasTransparency };
 }
 
-// Сжать изображение до maxW px по ширине и JPEG quality
-// (для PNG предварительно обрезает прозрачные поля по краям)
+// Сжать изображение до maxW px по ширине и JPEG quality.
+// PNG сохраняется как PNG (с обрезкой прозрачных полей по краям) только
+// если в нём реально есть альфа-канал — иначе (обычное фото/скриншот,
+// просто сохранённое как PNG) сжимается в JPEG, как и всё остальное:
+// PNG без прозрачности для фото весит в разы больше JPEG того же вида.
 function compressImage(dataUrl, isPng, maxW = 1400, quality = 0.82) {
   return new Promise(res => {
     const img = new Image();
     img.onload = () => {
       let sx = 0, sy = 0, sw = img.width, sh = img.height;
+      let keepPng = false;
 
       if (isPng) {
         const probe = document.createElement('canvas');
         probe.width = img.width; probe.height = img.height;
         const pctx = probe.getContext('2d');
         pctx.drawImage(img, 0, 0);
-        const trimmed = trimTransparentBounds(pctx, img.width, img.height);
-        if (trimmed) { sx = trimmed.left; sy = trimmed.top; sw = trimmed.width; sh = trimmed.height; }
+        const { bounds, hasTransparency } = analyzePngAlpha(pctx, img.width, img.height);
+        keepPng = hasTransparency;
+        if (hasTransparency && bounds) { sx = bounds.left; sy = bounds.top; sw = bounds.width; sh = bounds.height; }
       }
 
       const scale = Math.min(1, maxW / sw);
@@ -1307,8 +1312,7 @@ function compressImage(dataUrl, isPng, maxW = 1400, quality = 0.82) {
       const c = document.createElement('canvas');
       c.width = w; c.height = h;
       c.getContext('2d').drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
-      // PNG сохраняем как PNG — иначе прозрачность конвертится в чёрный фон при JPEG
-      res(isPng ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', quality));
+      res(keepPng ? c.toDataURL('image/png') : c.toDataURL('image/jpeg', quality));
     };
     img.src = dataUrl;
   });
@@ -1355,7 +1359,7 @@ async function fetchRemoteData() {
     const res = await fetch('./' + GH_PATH, { cache: 'no-store' });
     if (!res.ok) return;
     const data = await res.json();
-    localStorage.setItem('portfolio_projects', JSON.stringify(data.projects || []));
+    projectsCache = data.projects || [];
     localStorage.setItem('portfolio_order', JSON.stringify(data.order || null));
   } catch (e) {
     // офлайн / локальный file:// / файла ещё нет — используем локальный кэш как есть
