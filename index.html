@@ -1248,59 +1248,36 @@ let pendingImages = [];
 let dragSrcIdx    = null;
 let listDragSrc   = null;
 
-// Одноразовая чистка: раньше черновик (и до этого — вообще все работы)
-// хранились в localStorage без срока жизни и могли застрять там
-// навсегда, из-за чего страница переставала подтягивать свежие данные
-// с GitHub. Подчищаем всё это у всех, кто уже открывал сайт раньше.
+// Одноразовая чистка: в более ранних версиях работы (и черновики)
+// хранились в localStorage/sessionStorage без срока жизни и могли
+// застрять там навсегда, из-за чего страница переставала подтягивать
+// свежие данные с GitHub. Подчищаем всё это у всех, кто уже открывал
+// сайт раньше.
 try {
   localStorage.removeItem('portfolio_has_draft');
   localStorage.removeItem('portfolio_projects_draft');
   localStorage.removeItem('portfolio_projects');
   localStorage.removeItem('portfolio_order');
+  sessionStorage.removeItem('portfolio_has_draft');
+  sessionStorage.removeItem('portfolio_projects_draft');
+  sessionStorage.removeItem('portfolio_draft_ts');
+  sessionStorage.removeItem('portfolio_order');
 } catch (e) {}
 
-// ── projects (user-added) ────────────────────────────────
-// Источник правды — data/projects.json на GitHub. sessionStorage
-// используется ТОЛЬКО как черновик текущих неопубликованных правок
-// (portfolio_has_draft — флаг «есть черновик», portfolio_projects_draft
-// — сами данные): так правки переживают перезагрузку страницы (F5), но
-// автоматически исчезают при закрытии вкладки — в отличие от
-// localStorage черновик физически не может «застрять» навсегда.
-// После успешной публикации черновик стирается явно, и дальше данные
-// снова читаются из опубликованного файла (см. fetchRemoteData / publishNow).
+// ── projects (user-added) + order (all works) ────────────
+// Источник правды — data/projects.json на GitHub, подтягивается заново
+// при каждой загрузке страницы (см. fetchRemoteData). Всё, что
+// добавлено/изменено в панели, живёт только в памяти этой вкладки —
+// видно сразу же, без публикации, но НЕ переживает перезагрузку
+// страницы. Так надёжнее и проще, чем черновик в браузерном хранилище:
+// опубликованные работы никогда не могут быть закрыты застрявшим
+// локальным состоянием.
 let projectsCache = [];
-const DRAFT_MAX_AGE_MS = 60 * 60 * 1000; // час — старше не доверяем черновику
+let orderCache     = null; // null = ещё не загружен / нет сохранённого порядка
 function loadProjects() { return projectsCache; }
-function saveProjects(arr) {
-  projectsCache = arr;
-  markDraft();
-  try { sessionStorage.setItem('portfolio_projects_draft', JSON.stringify(arr)); }
-  catch (e) { /* черновик не влез в sessionStorage — работаем дальше в памяти,
-                 просто не переживёт перезагрузку страницы */ }
-}
-function hasDraft() {
-  try {
-    if (sessionStorage.getItem('portfolio_has_draft') !== '1') return false;
-    // у черновиков без метки времени (сохранённых до этого фикса) или
-    // старше часа — не доверяем, считаем зависшими и сбрасываем
-    const ts = parseInt(sessionStorage.getItem('portfolio_draft_ts') || '0', 10);
-    if (!ts || Date.now() - ts > DRAFT_MAX_AGE_MS) { clearDraft(); return false; }
-    return true;
-  } catch { return false; }
-}
-function markDraft() {
-  try {
-    sessionStorage.setItem('portfolio_has_draft', '1');
-    sessionStorage.setItem('portfolio_draft_ts', String(Date.now()));
-  } catch (e) {}
-}
-function clearDraft() {
-  try {
-    sessionStorage.removeItem('portfolio_has_draft');
-    sessionStorage.removeItem('portfolio_projects_draft');
-    sessionStorage.removeItem('portfolio_draft_ts');
-  } catch (e) {}
-}
+function saveProjects(arr) { projectsCache = arr; }
+function loadOrder() { return orderCache; }
+function saveOrder(arr) { orderCache = arr; }
 
 // Находит прямоугольник непрозрачных пикселей — чтобы обрезать
 // пустые прозрачные поля у PNG (иначе отступы сверху/снизу считаются
@@ -1354,15 +1331,6 @@ function compressImage(dataUrl, isPng, maxW = 1400, quality = 0.82) {
   });
 }
 
-// ── order (all works) ────────────────────────────────────
-// Тоже sessionStorage — по той же причине, что и черновик проектов
-// выше (не должно застревать навсегда между визитами).
-function loadOrder() {
-  try { return JSON.parse(sessionStorage.getItem('portfolio_order') || 'null'); }
-  catch { return null; }
-}
-function saveOrder(arr) { try { sessionStorage.setItem('portfolio_order', JSON.stringify(arr)); } catch (e) {} markDraft(); }
-
 // ════════════════════════════════════════════════════════
 //  GITHUB PUBLISH — данные, добавленные через панель, живут в
 //  data/projects.json в репозитории. Обычные посетители просто
@@ -1388,23 +1356,18 @@ function utf8ToBase64(str) {
   return btoa(binary);
 }
 
-// Если есть неопубликованный локальный черновик (в этой же вкладке,
-// sessionStorage) — используем его, order уже лежит там же.
-// Иначе подтягиваем опубликованное состояние с data/projects.json.
+// Подтягиваем опубликованное состояние с data/projects.json — всегда,
+// при каждой загрузке страницы, без исключений и веток (см. комментарий
+// выше про localStorage/sessionStorage — они больше здесь не участвуют).
 // Если файла ещё нет или мы открыты локально по file:// (fetch туда
-// не работает из-за CORS) — тихо остаёмся на том, что уже в кэше.
+// не работает из-за CORS) — тихо остаёмся на том, что уже в памяти.
 async function fetchRemoteData() {
-  if (hasDraft()) {
-    try { projectsCache = JSON.parse(sessionStorage.getItem('portfolio_projects_draft') || '[]'); }
-    catch { projectsCache = []; }
-    return;
-  }
   try {
     const res = await fetch('./' + GH_PATH, { cache: 'no-store' });
     if (!res.ok) return;
     const data = await res.json();
     projectsCache = data.projects || [];
-    try { sessionStorage.setItem('portfolio_order', JSON.stringify(data.order || null)); } catch (e) {}
+    orderCache = data.order || null;
   } catch (e) {
     // офлайн / локальный file:// / файла ещё нет — используем то, что уже в памяти
   }
@@ -1477,7 +1440,6 @@ async function publishNow() {
   statusEl.style.color = 'rgba(200,200,200,.6)';
   try {
     await publishToGithub();
-    clearDraft();
     statusEl.textContent = 'Опубликовано ✓ (на сайте появится примерно через минуту)';
     statusEl.style.color = 'rgba(140,200,140,.9)';
   } catch (e) {
