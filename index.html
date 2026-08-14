@@ -1274,9 +1274,16 @@ try {
 // локальным состоянием.
 let projectsCache = [];
 let orderCache     = null; // null = ещё не загружен / нет сохранённого порядка
-function loadProjects() { return projectsCache; }
+// Возвращаем КОПИЮ, не саму ссылку: код в панели делает
+// `let projects = loadProjects(); projects.push(...)` до вызова
+// saveProjects — если бы это мутировало сам кэш напрямую,
+// getOrder() (вызванный чуть позже, но раньше saveProjects) увидел бы
+// новый проект уже существующим и сам приписал бы его в конец order,
+// а следом ручной unshift ещё раз добавил бы его в начало — с двумя
+// вхождениями одного ID побеждает то, что применилось последним.
+function loadProjects() { return projectsCache.slice(); }
 function saveProjects(arr) { projectsCache = arr; }
-function loadOrder() { return orderCache; }
+function loadOrder() { return orderCache ? orderCache.slice() : orderCache; }
 function saveOrder(arr) { orderCache = arr; }
 
 // Находит прямоугольник непрозрачных пикселей — чтобы обрезать
