@@ -1509,6 +1509,16 @@ function fitFrame(workId) {
   if (g) { g.setAttribute('x2', w); g.setAttribute('y2', 0); }
 }
 
+// Пересчитывает рамку у ВСЕХ проектов с рамкой под текущий размер
+// карточки. fitFrame раньше вызывался только один раз, сразу после
+// загрузки картинок — при изменении ширины окна (или адаптивной
+// перестройке) размеры карточки менялись, а SVG рамки — нет, из-за
+// preserveAspectRatio="none" её растягивало неравномерно и скруглённые
+// углы «ломались». Вызываем и при ресайзе, не только при первом рендере.
+function refitAllFrames() {
+  loadProjects().filter(p => p.hasFrame).forEach(p => fitFrame(p.id));
+}
+
 // ════════════════════════════════════════════════════════
 //  WORK METADATA  (extracted from existing DOM on init)
 // ════════════════════════════════════════════════════════
@@ -1610,8 +1620,8 @@ function renderAll() {
   if (userWithFrame.length) {
     const imgs = Array.from(main.querySelectorAll('.user-project img'));
     let loaded = 0;
-    const check = () => { if (++loaded >= imgs.length) userWithFrame.forEach(p => fitFrame(p.id)); };
-    if (!imgs.length) userWithFrame.forEach(p => fitFrame(p.id));
+    const check = () => { if (++loaded >= imgs.length) refitAllFrames(); };
+    if (!imgs.length) refitAllFrames();
     else imgs.forEach(img => { if (img.complete) check(); else { img.onload = check; img.onerror = check; } });
   }
 
@@ -1898,7 +1908,7 @@ function setMobileLayout() {
   }
 }
 
-window.addEventListener('resize', setMobileLayout);
+window.addEventListener('resize', () => { setMobileLayout(); refitAllFrames(); });
 
 document.addEventListener('DOMContentLoaded', async () => {
   extractOrigMeta();
