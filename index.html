@@ -1249,14 +1249,35 @@ let dragSrcIdx    = null;
 let listDragSrc   = null;
 
 // ── projects (user-added) ────────────────────────────────
-// Источник правды — data/projects.json на GitHub (см. fetchRemoteData
-// / publishToGithub ниже). Здесь просто держим текущее состояние в
-// памяти страницы — localStorage не трогаем вовсе, чтобы не упираться
-// в его квоту (~5-10 МБ), которую уже опубликованные фото сами по себе
-// почти полностью выбирают.
+// Источник правды — data/projects.json на GitHub. localStorage
+// используется ТОЛЬКО как черновик текущих неопубликованных правок
+// (portfolio_has_draft — флаг «есть черновик», portfolio_projects_draft
+// — сами данные): так правки переживают перезагрузку страницы, но не
+// накапливаются бесконечно и не упираются в квоту localStorage —
+// после успешной публикации черновик стирается, и дальше данные снова
+// читаются из опубликованного файла (см. fetchRemoteData / publishNow).
 let projectsCache = [];
 function loadProjects() { return projectsCache; }
-function saveProjects(arr) { projectsCache = arr; }
+function saveProjects(arr) {
+  projectsCache = arr;
+  markDraft();
+  try { localStorage.setItem('portfolio_projects_draft', JSON.stringify(arr)); }
+  catch (e) { /* черновик не влез в localStorage — работаем дальше в памяти,
+                 просто не переживёт перезагрузку страницы */ }
+}
+function hasDraft() {
+  try { return localStorage.getItem('portfolio_has_draft') === '1'; }
+  catch { return false; }
+}
+function markDraft() {
+  try { localStorage.setItem('portfolio_has_draft', '1'); } catch (e) {}
+}
+function clearDraft() {
+  try {
+    localStorage.removeItem('portfolio_has_draft');
+    localStorage.removeItem('portfolio_projects_draft');
+  } catch (e) {}
+}
 
 // Находит прямоугольник непрозрачных пикселей — чтобы обрезать
 // пустые прозрачные поля у PNG (иначе отступы сверху/снизу считаются
@@ -1315,7 +1336,7 @@ function loadOrder() {
   try { return JSON.parse(localStorage.getItem('portfolio_order') || 'null'); }
   catch { return null; }
 }
-function saveOrder(arr) { localStorage.setItem('portfolio_order', JSON.stringify(arr)); }
+function saveOrder(arr) { localStorage.setItem('portfolio_order', JSON.stringify(arr)); markDraft(); }
 
 // ════════════════════════════════════════════════════════
 //  GITHUB PUBLISH — данные, добавленные через панель, живут в
@@ -1342,11 +1363,17 @@ function utf8ToBase64(str) {
   return btoa(binary);
 }
 
-// Подтягиваем опубликованные работы с сайта и кладём в localStorage,
-// чтобы вся остальная (синхронная) логика панели не менялась.
+// Если есть неопубликованный локальный черновик — используем его
+// (переживает перезагрузку страницы, order уже лежит в localStorage).
+// Иначе подтягиваем опубликованное состояние с data/projects.json.
 // Если файла ещё нет или мы открыты локально по file:// (fetch туда
 // не работает из-за CORS) — тихо остаёмся на том, что уже в кэше.
 async function fetchRemoteData() {
+  if (hasDraft()) {
+    try { projectsCache = JSON.parse(localStorage.getItem('portfolio_projects_draft') || '[]'); }
+    catch { projectsCache = []; }
+    return;
+  }
   try {
     const res = await fetch('./' + GH_PATH, { cache: 'no-store' });
     if (!res.ok) return;
@@ -1425,6 +1452,7 @@ async function publishNow() {
   statusEl.style.color = 'rgba(200,200,200,.6)';
   try {
     await publishToGithub();
+    clearDraft();
     statusEl.textContent = 'Опубликовано ✓ (на сайте появится примерно через минуту)';
     statusEl.style.color = 'rgba(140,200,140,.9)';
   } catch (e) {
