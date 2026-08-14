@@ -1248,34 +1248,46 @@ let pendingImages = [];
 let dragSrcIdx    = null;
 let listDragSrc   = null;
 
+// Одноразовая чистка: раньше черновик (и до этого — вообще все работы)
+// хранились в localStorage без срока жизни и могли застрять там
+// навсегда, из-за чего страница переставала подтягивать свежие данные
+// с GitHub. Подчищаем всё это у всех, кто уже открывал сайт раньше.
+try {
+  localStorage.removeItem('portfolio_has_draft');
+  localStorage.removeItem('portfolio_projects_draft');
+  localStorage.removeItem('portfolio_projects');
+  localStorage.removeItem('portfolio_order');
+} catch (e) {}
+
 // ── projects (user-added) ────────────────────────────────
-// Источник правды — data/projects.json на GitHub. localStorage
+// Источник правды — data/projects.json на GitHub. sessionStorage
 // используется ТОЛЬКО как черновик текущих неопубликованных правок
 // (portfolio_has_draft — флаг «есть черновик», portfolio_projects_draft
-// — сами данные): так правки переживают перезагрузку страницы, но не
-// накапливаются бесконечно и не упираются в квоту localStorage —
-// после успешной публикации черновик стирается, и дальше данные снова
-// читаются из опубликованного файла (см. fetchRemoteData / publishNow).
+// — сами данные): так правки переживают перезагрузку страницы (F5), но
+// автоматически исчезают при закрытии вкладки — в отличие от
+// localStorage черновик физически не может «застрять» навсегда.
+// После успешной публикации черновик стирается явно, и дальше данные
+// снова читаются из опубликованного файла (см. fetchRemoteData / publishNow).
 let projectsCache = [];
 function loadProjects() { return projectsCache; }
 function saveProjects(arr) {
   projectsCache = arr;
   markDraft();
-  try { localStorage.setItem('portfolio_projects_draft', JSON.stringify(arr)); }
-  catch (e) { /* черновик не влез в localStorage — работаем дальше в памяти,
+  try { sessionStorage.setItem('portfolio_projects_draft', JSON.stringify(arr)); }
+  catch (e) { /* черновик не влез в sessionStorage — работаем дальше в памяти,
                  просто не переживёт перезагрузку страницы */ }
 }
 function hasDraft() {
-  try { return localStorage.getItem('portfolio_has_draft') === '1'; }
+  try { return sessionStorage.getItem('portfolio_has_draft') === '1'; }
   catch { return false; }
 }
 function markDraft() {
-  try { localStorage.setItem('portfolio_has_draft', '1'); } catch (e) {}
+  try { sessionStorage.setItem('portfolio_has_draft', '1'); } catch (e) {}
 }
 function clearDraft() {
   try {
-    localStorage.removeItem('portfolio_has_draft');
-    localStorage.removeItem('portfolio_projects_draft');
+    sessionStorage.removeItem('portfolio_has_draft');
+    sessionStorage.removeItem('portfolio_projects_draft');
   } catch (e) {}
 }
 
@@ -1332,11 +1344,13 @@ function compressImage(dataUrl, isPng, maxW = 1400, quality = 0.82) {
 }
 
 // ── order (all works) ────────────────────────────────────
+// Тоже sessionStorage — по той же причине, что и черновик проектов
+// выше (не должно застревать навсегда между визитами).
 function loadOrder() {
-  try { return JSON.parse(localStorage.getItem('portfolio_order') || 'null'); }
+  try { return JSON.parse(sessionStorage.getItem('portfolio_order') || 'null'); }
   catch { return null; }
 }
-function saveOrder(arr) { localStorage.setItem('portfolio_order', JSON.stringify(arr)); markDraft(); }
+function saveOrder(arr) { try { sessionStorage.setItem('portfolio_order', JSON.stringify(arr)); } catch (e) {} markDraft(); }
 
 // ════════════════════════════════════════════════════════
 //  GITHUB PUBLISH — данные, добавленные через панель, живут в
@@ -1363,14 +1377,14 @@ function utf8ToBase64(str) {
   return btoa(binary);
 }
 
-// Если есть неопубликованный локальный черновик — используем его
-// (переживает перезагрузку страницы, order уже лежит в localStorage).
+// Если есть неопубликованный локальный черновик (в этой же вкладке,
+// sessionStorage) — используем его, order уже лежит там же.
 // Иначе подтягиваем опубликованное состояние с data/projects.json.
 // Если файла ещё нет или мы открыты локально по file:// (fetch туда
 // не работает из-за CORS) — тихо остаёмся на том, что уже в кэше.
 async function fetchRemoteData() {
   if (hasDraft()) {
-    try { projectsCache = JSON.parse(localStorage.getItem('portfolio_projects_draft') || '[]'); }
+    try { projectsCache = JSON.parse(sessionStorage.getItem('portfolio_projects_draft') || '[]'); }
     catch { projectsCache = []; }
     return;
   }
@@ -1379,7 +1393,7 @@ async function fetchRemoteData() {
     if (!res.ok) return;
     const data = await res.json();
     projectsCache = data.projects || [];
-    localStorage.setItem('portfolio_order', JSON.stringify(data.order || null));
+    try { sessionStorage.setItem('portfolio_order', JSON.stringify(data.order || null)); } catch (e) {}
   } catch (e) {
     // офлайн / локальный file:// / файла ещё нет — используем то, что уже в памяти
   }
