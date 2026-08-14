@@ -1471,7 +1471,7 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function buildImgsHtml(imgs, layout) {
+function buildImgsHtml(imgs, layout, hasFrame) {
   if (!imgs.length) return '';
   if (imgs.length === 1)
     return `<img src="${imgs[0]}" alt="" style="width:100%;height:auto;display:block;border-radius:14px;">`;
@@ -1486,7 +1486,10 @@ function buildImgsHtml(imgs, layout) {
     const cols = imgs.length === 3 ? 3 : 2;
     return `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${gap}px;">${imgs.map(s=>`<img src="${s}" alt="" style="width:100%;height:auto;border-radius:${r}px;display:block;">`).join('')}</div>`;
   }
-  return `<div style="display:flex;flex-direction:column;gap:${gap}px;">${imgs.map(s=>`<img src="${s}" alt="" style="width:100%;height:auto;border-radius:${r}px;display:block;">`).join('')}</div>`;
+  // Стопка: отступ между фото — как между рамкой и краем фото
+  // (padding у .user-project__inner--framed/--plain)
+  const stackGap = 28;
+  return `<div style="display:flex;flex-direction:column;gap:${stackGap}px;">${imgs.map(s=>`<img src="${s}" alt="" style="width:100%;height:auto;border-radius:${r}px;display:block;">`).join('')}</div>`;
 }
 
 function gradientSVG(w, h, uid) {
@@ -1579,7 +1582,7 @@ function renderAll() {
       el.dataset.workId = p.id;
       el.style.marginBottom = '30px';
       const imgs = p.images || [];
-      const imgsHtml = buildImgsHtml(imgs, p.layout || 'row');
+      const imgsHtml = buildImgsHtml(imgs, p.layout || 'row', p.hasFrame);
       const frameOverlay = p.hasFrame
         ? `<div class="user-project__frame" id="frame_${p.id}">${gradientSVG(600, 400, 'g_' + p.id)}</div>`
         : '';
