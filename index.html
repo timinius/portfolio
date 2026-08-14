@@ -1249,18 +1249,14 @@ let dragSrcIdx    = null;
 let listDragSrc   = null;
 
 // ── projects (user-added) ────────────────────────────────
-function loadProjects() {
-  try { return JSON.parse(localStorage.getItem('portfolio_projects') || '[]'); }
-  catch { return []; }
-}
-function saveProjects(arr) {
-  try {
-    localStorage.setItem('portfolio_projects', JSON.stringify(arr));
-  } catch(e) {
-    alert('Не удалось сохранить: изображения слишком большие. Попробуй уменьшить их перед загрузкой.');
-    throw e;
-  }
-}
+// Источник правды — data/projects.json на GitHub (см. fetchRemoteData
+// / publishToGithub ниже). Здесь просто держим текущее состояние в
+// памяти страницы — localStorage не трогаем вовсе, чтобы не упираться
+// в его квоту (~5-10 МБ), которую уже опубликованные фото сами по себе
+// почти полностью выбирают.
+let projectsCache = [];
+function loadProjects() { return projectsCache; }
+function saveProjects(arr) { projectsCache = arr; }
 
 // Находит прямоугольник непрозрачных пикселей — чтобы обрезать
 // пустые прозрачные поля у PNG (иначе отступы сверху/снизу считаются
@@ -1355,15 +1351,15 @@ async function fetchRemoteData() {
     const res = await fetch('./' + GH_PATH, { cache: 'no-store' });
     if (!res.ok) return;
     const data = await res.json();
-    localStorage.setItem('portfolio_projects', JSON.stringify(data.projects || []));
+    projectsCache = data.projects || [];
     localStorage.setItem('portfolio_order', JSON.stringify(data.order || null));
   } catch (e) {
-    // офлайн / локальный file:// / файла ещё нет — используем локальный кэш как есть
+    // офлайн / локальный file:// / файла ещё нет — используем то, что уже в памяти
   }
 }
 
-// Публикует ТЕКУЩЕЕ состояние (localStorage) в data/projects.json
-// репозитория одним коммитом через GitHub Contents API.
+// Публикует ТЕКУЩЕЕ состояние в data/projects.json репозитория
+// одним коммитом через GitHub Contents API.
 async function publishToGithub() {
   const token = getGhToken();
   if (!token) throw new Error('сначала вставьте токен');
