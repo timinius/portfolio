@@ -1269,6 +1269,7 @@ try {
 // После успешной публикации черновик стирается явно, и дальше данные
 // снова читаются из опубликованного файла (см. fetchRemoteData / publishNow).
 let projectsCache = [];
+const DRAFT_MAX_AGE_MS = 60 * 60 * 1000; // час — старше не доверяем черновику
 function loadProjects() { return projectsCache; }
 function saveProjects(arr) {
   projectsCache = arr;
@@ -1278,16 +1279,26 @@ function saveProjects(arr) {
                  просто не переживёт перезагрузку страницы */ }
 }
 function hasDraft() {
-  try { return sessionStorage.getItem('portfolio_has_draft') === '1'; }
-  catch { return false; }
+  try {
+    if (sessionStorage.getItem('portfolio_has_draft') !== '1') return false;
+    // у черновиков без метки времени (сохранённых до этого фикса) или
+    // старше часа — не доверяем, считаем зависшими и сбрасываем
+    const ts = parseInt(sessionStorage.getItem('portfolio_draft_ts') || '0', 10);
+    if (!ts || Date.now() - ts > DRAFT_MAX_AGE_MS) { clearDraft(); return false; }
+    return true;
+  } catch { return false; }
 }
 function markDraft() {
-  try { sessionStorage.setItem('portfolio_has_draft', '1'); } catch (e) {}
+  try {
+    sessionStorage.setItem('portfolio_has_draft', '1');
+    sessionStorage.setItem('portfolio_draft_ts', String(Date.now()));
+  } catch (e) {}
 }
 function clearDraft() {
   try {
     sessionStorage.removeItem('portfolio_has_draft');
     sessionStorage.removeItem('portfolio_projects_draft');
+    sessionStorage.removeItem('portfolio_draft_ts');
   } catch (e) {}
 }
 
