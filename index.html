@@ -1615,18 +1615,22 @@ function renderAll() {
     if (el) main.appendChild(el); // appendChild moves if already in DOM
   });
 
-  // Fit gradient frames after images load
-  const userWithFrame = projects.filter(p => p.hasFrame);
-  if (userWithFrame.length) {
-    const imgs = Array.from(main.querySelectorAll('.user-project img'));
+  // После загрузки ВСЕХ картинок — сначала выставляем пропорции фото
+  // в раскладке «в ряд» (fitRowImages), и только ПОТОМ меряем итоговый
+  // размер карточки под рамку (refitAllFrames). Порядок важен: если
+  // рамку измерить раньше, чем фото в ряду примут финальную высоту,
+  // получится неверный (меньший/больший) размер и разрыв у края.
+  const imgs = Array.from(main.querySelectorAll('.user-project img'));
+  const whenAllLoaded = () => {
+    fitRowImages(main);
+    refitAllFrames();
+  };
+  if (!imgs.length) whenAllLoaded();
+  else {
     let loaded = 0;
-    const check = () => { if (++loaded >= imgs.length) refitAllFrames(); };
-    if (!imgs.length) refitAllFrames();
-    else imgs.forEach(img => { if (img.complete) check(); else { img.onload = check; img.onerror = check; } });
+    const check = () => { if (++loaded >= imgs.length) whenAllLoaded(); };
+    imgs.forEach(img => { if (img.complete) check(); else { img.onload = check; img.onerror = check; } });
   }
-
-  // Ряды фото: одинаковая высота, ширина каждого — по своим пропорциям
-  fitRowImages(main);
 
   // Пересчитываем мобильный масштаб после каждого рендера
   if (typeof setMobileLayout === 'function') setMobileLayout();
