@@ -63,13 +63,13 @@ body { background: rgb(18,19,22,1.000); }
 }
 
 /* ── User-added projects ──────────────────────────────── */
-/* Ширина в % от родного канваса (1195/1280 = 93.359375%) — не
-   фиксированный px, чтобы на узких экранах карточка (и её рамка)
-   сохраняла ТОЧНО тот же отступ от края, что и на десктопе, а не
-   растягивалась на всю ширину экрана */
+/* Фиксированная десктопная ширина — как и весь блок «работы», карточка
+   на узких экранах не перестраивается адаптивно, а просто пропорционально
+   уменьшается целиком через zoom (см. setMobileLayout), оставаясь тем
+   же самым потоком, что и на десктопе */
 .user-project {
   position: relative;
-  width: 93.359375%;
+  width: 1195px;
   margin: 0 auto 30px;
 }
 .user-project__img-wrap {
@@ -1530,7 +1530,12 @@ function fitFrame(workId) {
   const wrap = document.querySelector(`[data-work-id="${workId}"] .user-project__img-wrap`);
   const frame = document.getElementById('frame_' + workId);
   if (!wrap || !frame) return;
-  const w = wrap.offsetWidth, h = wrap.offsetHeight;
+  // getBoundingClientRect (не offsetWidth/Height!) — карточка может лежать
+  // внутри зумленного .user-project (мобильный масштаб), а offsetWidth
+  // zoom родителя не учитывает и всегда вернёт немасштабированный
+  // desktop-размер, из-за чего рамка на телефоне была бы посчитана неверно.
+  const rect = wrap.getBoundingClientRect();
+  const w = Math.round(rect.width), h = Math.round(rect.height);
   const svg = frame.querySelector('svg');
   svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
   svg.querySelector('rect').setAttribute('width',  w - 1);
@@ -1674,6 +1679,12 @@ function renderAll() {
   const imgs = Array.from(main.querySelectorAll('.user-project img'));
   const whenAllLoaded = () => {
     fitRowImages(main);
+    // setMobileLayout — на случай, если картинки из кэша грузятся
+    // синхронно и этот колбэк успевает выполниться РАНЬШЕ вызова
+    // setMobileLayout() в конце renderAll(): рамку нужно мерить уже
+    // после того, как к карточке применён (или снят) mobile-zoom,
+    // иначе refitAllFrames посчитает немасштабированный desktop-размер.
+    if (typeof setMobileLayout === 'function') setMobileLayout();
     refitAllFrames();
   };
   if (!imgs.length) whenAllLoaded();
@@ -1917,6 +1928,7 @@ function setMobileLayout() {
   const vw       = document.documentElement.clientWidth;
   const hdr      = document.querySelector('header');
   const figs     = document.querySelectorAll('figure.work');
+  const userProjects = document.querySelectorAll('.user-project');
   const headingTexts = document.querySelectorAll('.heading-text');
 
   if (vw < 1280) {
@@ -1945,6 +1957,11 @@ function setMobileLayout() {
       fig.style.left = fig.dataset.origLeft;
     });
 
+    // Карточки из админки — тот же приём: zoom всего блока целиком
+    // (центрирование через margin:0 auto пересчитывается браузером
+    // корректно и после zoom, само по себе, без ручных поправок).
+    userProjects.forEach(p => { p.style.zoom = s; });
+
     // Заголовки секций: та же пропорция, что и у остального контента,
     // но не ниже 0.625 (40px печатный текст не мельче 25px) — левый/
     // правый край при этом просто уезжает за пределы канваса и обрезается
@@ -1963,6 +1980,8 @@ function setMobileLayout() {
       fig.style.zoom = '';
       if (fig.dataset.origLeft) fig.style.left = fig.dataset.origLeft;
     });
+
+    userProjects.forEach(p => { p.style.zoom = ''; });
 
     headingTexts.forEach(h => { h.style.transform = ''; });
   }
