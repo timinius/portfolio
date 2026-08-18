@@ -63,9 +63,13 @@ body { background: rgb(18,19,22,1.000); }
 }
 
 /* ── User-added projects ──────────────────────────────── */
+/* Ширина в % от родного канваса (1195/1280 = 93.359375%) — не
+   фиксированный px, чтобы на узких экранах карточка (и её рамка)
+   сохраняла ТОЧНО тот же отступ от края, что и на десктопе, а не
+   растягивалась на всю ширину экрана */
 .user-project {
   position: relative;
-  max-width: 1195px;
+  width: 93.359375%;
   margin: 0 auto 30px;
 }
 .user-project__img-wrap {
@@ -543,6 +547,10 @@ body { background: rgb(18,19,22,1.000); }
   background: linear-gradient(90deg, rgba(154,128,86,0) 0%, rgba(154,128,86,1) 100%);
 }
 
+/* Обёртка печатного + курсивного слоя в заголовках секций — масштабируется
+   целиком через JS (setMobileLayout), см. .section-heading в медиа-запросах */
+.heading-text { transform-origin: 50% 0; }
+
 .frame-overlay {
   position: absolute;
   left: 0;
@@ -655,19 +663,13 @@ figure.work {
   #resume-section { width: 100% !important; }
 
   /* Заголовки «РЕЗЮМЕ» и «МОИ РАБОТЫ»: остаются крупными на планшете
-     (текст не уменьшается через JS zoom, а масштабируется по CSS
-     clamp — печатный и курсивный слой используют одинаковый коэффициент,
-     поэтому не съезжают друг относительно друга). Боковые линии на
-     планшете укорачиваются и отходят к краям блока. */
+     и телефоне. Печатный и курсивный слой лежат внутри .heading-text —
+     JS (setMobileLayout) масштабирует этот блок целиком через
+     transform:scale, поэтому оба слоя всегда сохраняют ТОЧНО такое же
+     взаимное положение, как на десктопе, на любом экране. Боковые
+     линии в это масштабирование не входят и на планшете просто
+     укорачиваются, отходя к краям блока. */
   .section-heading { width: 100% !important; }
-  .section-heading h2.t-druk {
-    font-size:   clamp(25px, 8vw, 40px)      !important;
-    line-height: 1.03                        !important;
-  }
-  .section-heading .t-script {
-    font-size:   clamp(80px, 25.6vw, 128px)  !important;
-    line-height: 1.03                        !important;
-  }
   .section-heading .grad-l,
   .section-heading .grad-r { width: 64px !important; }
   .section-heading .grad-l { left: 24px !important; }
@@ -755,8 +757,10 @@ figure.work {
         <div style="position:absolute;top:0;left:0;width:100%;height:1px;background:rgba(255,255,255,0.21);"></div>
         <div class="grad-l" style="left:56px;top:62px;width:425px;"></div>
         <div class="grad-r" style="left:800px;top:62px;width:425px;"></div>
-        <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;background:rgba(18,19,22,1);margin:0;padding:0 20px;">РЕЗЮМЕ</h2>
-        <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">резюме</div>
+        <div class="heading-text" style="position:absolute;left:50%;top:0;width:1280px;height:104px;transform:translateX(-50%);">
+          <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;margin:0;padding:0 20px;">РЕЗЮМЕ</h2>
+          <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">резюме</div>
+        </div>
       </div>
 
       <!-- Основная сетка: 2 колонки -->
@@ -921,8 +925,10 @@ figure.work {
       <div style="position:absolute;top:0;left:0;width:100%;height:1px;background:rgba(255,255,255,0.21);"></div>
       <div class="grad-l" style="left:56px;top:62px;width:425px;"></div>
       <div class="grad-r" style="left:800px;top:62px;width:425px;"></div>
-      <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;background:rgba(18,19,22,1);margin:0;padding:0 20px;">МОИ РАБОТЫ</h2>
-      <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">мои работы</div>
+      <div class="heading-text" style="position:absolute;left:50%;top:0;width:1280px;height:104px;transform:translateX(-50%);">
+        <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;margin:0;padding:0 20px;">МОИ РАБОТЫ</h2>
+        <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">мои работы</div>
+      </div>
     </div>
     <!-- /ЗАГОЛОВОК «МОИ РАБОТЫ» -->
 
@@ -1898,15 +1904,20 @@ function saveProject() {
 // нераспахнутые окна браузера — не только телефоны). Вся визуальная
 // идентика (фото, декоры, SVG) сохраняется — контент просто
 // уменьшается через CSS zoom, порядок работ не меняется.
-// Заголовки «РЕЗЮМЕ» / «МОИ РАБОТЫ» в этом масштабировании больше не
-// участвуют — они остаются крупными за счёт CSS clamp (см. .section-heading
-// в <style>), только боковые линии подстраиваются под ширину экрана.
+// Заголовки «РЕЗЮМЕ» / «МОИ РАБОТЫ»: .heading-text (печатный + курсивный
+// слой вместе) масштабируется через transform:scale как единый жёсткий
+// блок — это гарантирует, что курсив всегда лежит относительно печатного
+// текста ТОЧНО так же, как на десктопе, на любом экране (в отличие от
+// независимого масштабирования font-size). У масштаба есть нижний порог
+// (0.625), чтобы заголовок не становился мелким на телефоне — только
+// боковые линии (не входящие в .heading-text) подстраиваются отдельно.
 function setMobileLayout() {
   // clientWidth (not innerWidth) — совпадает с шириной, которую реально
   // получает .canvas{width:100%}, т.к. не включает полосу прокрутки
   const vw       = document.documentElement.clientWidth;
   const hdr      = document.querySelector('header');
   const figs     = document.querySelectorAll('figure.work');
+  const headingTexts = document.querySelectorAll('.heading-text');
 
   if (vw < 1280) {
     const s = vw / 1280; // пропорциональный масштаб
@@ -1934,6 +1945,13 @@ function setMobileLayout() {
       fig.style.left = fig.dataset.origLeft;
     });
 
+    // Заголовки секций: та же пропорция, что и у остального контента,
+    // но не ниже 0.625 (40px печатный текст не мельче 25px) — левый/
+    // правый край при этом просто уезжает за пределы канваса и обрезается
+    // overflow:hidden, сам текст (уже центрированный) всегда виден целиком.
+    const headingScale = Math.max(s, 0.625);
+    headingTexts.forEach(h => { h.style.transform = `translateX(-50%) scale(${headingScale})`; });
+
   } else {
     // Восстанавливаем десктоп-значения (инлайн-атрибуты header
     // сохранены в HTML и вернутся после сброса JS-перезаписи)
@@ -1945,6 +1963,8 @@ function setMobileLayout() {
       fig.style.zoom = '';
       if (fig.dataset.origLeft) fig.style.left = fig.dataset.origLeft;
     });
+
+    headingTexts.forEach(h => { h.style.transform = ''; });
   }
 }
 
