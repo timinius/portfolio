@@ -753,11 +753,11 @@ figure.work {
 <section id="resume-section" style="position:relative;width:1280px;margin-bottom:60px;">
 
       <!-- Заголовок РЕЗЮМЕ в стиле «МОИ РАБОТЫ» -->
-      <div class="section-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:40px;">
+      <div class="section-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:40px;display:flex;justify-content:center;align-items:flex-start;">
         <div style="position:absolute;top:0;left:0;width:100%;height:1px;background:rgba(255,255,255,0.21);"></div>
         <div class="grad-l" style="left:56px;top:62px;width:425px;"></div>
         <div class="grad-r" style="left:800px;top:62px;width:425px;"></div>
-        <div class="heading-text" style="position:absolute;left:50%;top:0;width:1280px;height:104px;transform:translateX(-50%);">
+        <div class="heading-text" style="position:relative;">
           <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;margin:0;padding:0 20px;">РЕЗЮМЕ</h2>
           <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">резюме</div>
         </div>
@@ -922,11 +922,11 @@ figure.work {
   <main style="position:relative;width:1280px;" aria-label="Портфолио">
 
     <!-- ЗАГОЛОВОК «МОИ РАБОТЫ» (flow, после резюме) -->
-    <div id="works-heading" class="section-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:50px;">
+    <div id="works-heading" class="section-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:50px;display:flex;justify-content:center;align-items:flex-start;">
       <div style="position:absolute;top:0;left:0;width:100%;height:1px;background:rgba(255,255,255,0.21);"></div>
       <div class="grad-l" style="left:56px;top:62px;width:425px;"></div>
       <div class="grad-r" style="left:800px;top:62px;width:425px;"></div>
-      <div class="heading-text" style="position:absolute;left:50%;top:0;width:1280px;height:104px;transform:translateX(-50%);">
+      <div class="heading-text" style="position:relative;">
         <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;margin:0;padding:0 20px;">МОИ РАБОТЫ</h2>
         <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">мои работы</div>
       </div>
@@ -1935,6 +1935,7 @@ function setMobileLayout() {
   const figs     = document.querySelectorAll('figure.work');
   const userProjects = document.querySelectorAll('.user-project');
   const headingTexts = document.querySelectorAll('.heading-text');
+  const sectionHeadings = document.querySelectorAll('.section-heading');
 
   if (vw < 1280) {
     const s = vw / 1280; // пропорциональный масштаб
@@ -1968,11 +1969,25 @@ function setMobileLayout() {
     userProjects.forEach(p => { p.style.zoom = s; });
 
     // Заголовки секций: та же пропорция, что и у остального контента,
-    // но не ниже 0.625 (40px печатный текст не мельче 25px) — левый/
-    // правый край при этом просто уезжает за пределы канваса и обрезается
-    // overflow:hidden, сам текст (уже центрированный) всегда виден целиком.
+    // но не ниже 0.625 (40px печатный текст не мельче 25px). Центрирование
+    // теперь на flexbox родителя (.section-heading), поэтому transform —
+    // только scale, без ручного translateX(-50%).
     const headingScale = Math.max(s, 0.625);
-    headingTexts.forEach(h => { h.style.transform = `translateX(-50%) scale(${headingScale})`; });
+    headingTexts.forEach(h => { h.style.transform = `scale(${headingScale})`; });
+
+    // Высота и отступ снизу у самого блока .section-heading заданы в px
+    // (104 / 40 или 50) и без этого остались бы desktop-размера — на узком
+    // экране, где всё остальное вокруг уже уменьшилось, это выглядело бы
+    // непропорционально огромным разрывом перед следующим блоком. Поэтому
+    // масштабируем их тем же коэффициентом, что и сам текст.
+    sectionHeadings.forEach(sh => {
+      if (!sh.dataset.origHeight) sh.dataset.origHeight = sh.style.height;
+      if (!sh.dataset.origMarginBottom) sh.dataset.origMarginBottom = sh.style.marginBottom;
+      const origH  = parseFloat(sh.dataset.origHeight);
+      const origMB = parseFloat(sh.dataset.origMarginBottom);
+      sh.style.height       = (origH  * headingScale) + 'px';
+      sh.style.marginBottom = (origMB * headingScale) + 'px';
+    });
 
   } else {
     // Восстанавливаем десктоп-значения (инлайн-атрибуты header
@@ -1989,6 +2004,11 @@ function setMobileLayout() {
     userProjects.forEach(p => { p.style.zoom = ''; });
 
     headingTexts.forEach(h => { h.style.transform = ''; });
+
+    sectionHeadings.forEach(sh => {
+      if (sh.dataset.origHeight)       sh.style.height       = sh.dataset.origHeight;
+      if (sh.dataset.origMarginBottom) sh.style.marginBottom = sh.dataset.origMarginBottom;
+    });
   }
 }
 
