@@ -654,9 +654,24 @@ figure.work {
   /* ── РЕЗЮМЕ: секция ──────────────────────────────── */
   #resume-section { width: 100% !important; }
 
-  /* Заголовки «РЕЗЮМЕ» и «МОИ РАБОТЫ» (печатный + курсивный слой)
-     масштабируются как единый блок через JS zoom (setMobileLayout),
-     чтобы курсив и надпись никогда не съезжали друг относительно друга */
+  /* Заголовки «РЕЗЮМЕ» и «МОИ РАБОТЫ»: остаются крупными на планшете
+     (текст не уменьшается через JS zoom, а масштабируется по CSS
+     clamp — печатный и курсивный слой используют одинаковый коэффициент,
+     поэтому не съезжают друг относительно друга). Боковые линии на
+     планшете укорачиваются и отходят к краям блока. */
+  .section-heading { width: 100% !important; }
+  .section-heading h2.t-druk {
+    font-size:   clamp(25px, 8vw, 40px)      !important;
+    line-height: 1.03                        !important;
+  }
+  .section-heading .t-script {
+    font-size:   clamp(80px, 25.6vw, 128px)  !important;
+    line-height: 1.03                        !important;
+  }
+  .section-heading .grad-l,
+  .section-heading .grad-r { width: 64px !important; }
+  .section-heading .grad-l { left: 24px !important; }
+  .section-heading .grad-r { left: auto !important; right: 24px !important; }
 
   /* Сетка резюме остаётся двухколоночной на планшетах, но становится резиновой */
   #resume-section div[style*="grid-template-columns"] {
@@ -669,6 +684,11 @@ figure.work {
 }
 
 @media (max-width: 899px) {
+
+  /* На телефонах боковых линий у заголовков нет совсем — весь отступ
+     отдаём под крупный текст «РЕЗЮМЕ» / «МОИ РАБОТЫ» */
+  .section-heading .grad-l,
+  .section-heading .grad-r { display: none !important; }
 
   /* Двухколонная сетка резюме → одна колонка (на телефонах и узких планшетах) */
   #resume-section div[style*="grid-template-columns"] {
@@ -731,11 +751,11 @@ figure.work {
 <section id="resume-section" style="position:relative;width:1280px;margin-bottom:60px;">
 
       <!-- Заголовок РЕЗЮМЕ в стиле «МОИ РАБОТЫ» -->
-      <div style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:40px;">
+      <div class="section-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:40px;">
         <div style="position:absolute;top:0;left:0;width:100%;height:1px;background:rgba(255,255,255,0.21);"></div>
         <div class="grad-l" style="left:56px;top:62px;width:425px;"></div>
         <div class="grad-r" style="left:800px;top:62px;width:425px;"></div>
-        <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;margin:0;padding:0 20px;">РЕЗЮМЕ</h2>
+        <h2 class="t-druk" style="position:absolute;left:50%;transform:translateX(-50%);top:45px;font-size:40px;line-height:41.2px;white-space:nowrap;background:rgba(18,19,22,1);margin:0;padding:0 20px;">РЕЗЮМЕ</h2>
         <div aria-hidden="true" class="t-script" style="position:absolute;left:50%;transform:translateX(-50%);top:10px;font-size:128px;line-height:131.84px;white-space:nowrap;pointer-events:none;user-select:none;overflow:visible;">резюме</div>
       </div>
 
@@ -751,7 +771,7 @@ figure.work {
               <span style="font-family:'Druk Text Wide',sans-serif;font-size:11px;font-weight:500;color:rgba(154,128,86,1);letter-spacing:0.14em;text-transform:uppercase;">О себе</span>
             </div>
             <p style="font-family:'Stem',sans-serif;font-weight:300;font-size:14px;line-height:1.75;color:rgba(255,255,255,0.82);margin:0;">
-              Более 3,5 лет работаю в сфере дизайна, сотрудничал с разными блогерами, стримерами и редакциями. Выполнял различного рода задачи, такие как превью для видеороликов, дизайн одежды, оформление и ведение социальных сетей, логотипы, различную полиграфию и другие услуги по дизайну, фото- и видеомонтажу. Сейчас работаю дизайнером в маркетинговом агенстве Victory Group уже год, занимаюсь созданием рекламных материалов.
+              Более 3,5 лет в дизайне, сотрудничал с разными блогерами, стримерами, редакциями и компаниями. Выполнял различного рода задачи, такие как CTR-ориентированные превью для видео, дизайн одежды, оформление и ведение социальных сетей, логотипы, различную полиграфию, ведение GEO-сервисов и другие услуги по дизайну, фото- и видеомонтажу. Создавал макеты по имеющимся дизайн-системам или создавал таковые с нуля, занимался брендингом.<br><br>За спиной огромный опыт работы с самыми различными сферами, для меня дизайн это не просто красивая картинка - это психология воздействия на покупателя с целью зацепить его внимание и заинтересовать продуктом.
             </p>
           </div>
 
@@ -815,7 +835,7 @@ figure.work {
               <div style="position:absolute;left:2.5px;top:13px;bottom:-22px;width:1px;background:rgba(154,128,86,0.22);"></div>
               <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px;">
                 <span style="font-family:'Stem',sans-serif;font-weight:300;font-size:14px;color:#fff;line-height:1.3;">Дизайнер · VICTORY Group</span>
-                <span style="font-family:'Helvetica',sans-serif;font-size:11px;font-weight:300;color:rgba(154,128,86,0.8);white-space:nowrap;flex-shrink:0;">2024 — н.в.</span>
+                <span style="font-family:'Helvetica',sans-serif;font-size:11px;font-weight:300;color:rgba(154,128,86,0.8);white-space:nowrap;flex-shrink:0;">1,4 года</span>
               </div>
               <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;">
                 <li style="font-family:'Helvetica',sans-serif;font-size:12.5px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.55;padding-left:10px;position:relative;">
@@ -824,11 +844,15 @@ figure.work {
                 </li>
                 <li style="font-family:'Helvetica',sans-serif;font-size:12.5px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.55;padding-left:10px;position:relative;">
                   <span style="position:absolute;left:0;top:8px;width:3px;height:3px;background:rgba(255,255,255,0.3);border-radius:50%;"></span>
-                  GEO-сервисы: карточки, оформление, репутация
+                  Работа с фотопотоком, обработка фото
                 </li>
                 <li style="font-family:'Helvetica',sans-serif;font-size:12.5px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.55;padding-left:10px;position:relative;">
                   <span style="position:absolute;left:0;top:8px;width:3px;height:3px;background:rgba(255,255,255,0.3);border-radius:50%;"></span>
-                  1 500+ выпущенных баннеров
+                  Работа с прайс-листами, оформление
+                </li>
+                <li style="font-family:'Helvetica',sans-serif;font-size:12.5px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.55;padding-left:10px;position:relative;">
+                  <span style="position:absolute;left:0;top:8px;width:3px;height:3px;background:rgba(255,255,255,0.3);border-radius:50%;"></span>
+                  2 500+ выпущенных баннеров
                 </li>
               </ul>
             </div>
@@ -893,7 +917,7 @@ figure.work {
   <main style="position:relative;width:1280px;" aria-label="Портфолио">
 
     <!-- ЗАГОЛОВОК «МОИ РАБОТЫ» (flow, после резюме) -->
-    <div id="works-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:50px;">
+    <div id="works-heading" class="section-heading" style="position:relative;width:1280px;height:104px;overflow:visible;margin-bottom:50px;">
       <div style="position:absolute;top:0;left:0;width:100%;height:1px;background:rgba(255,255,255,0.21);"></div>
       <div class="grad-l" style="left:56px;top:62px;width:425px;"></div>
       <div class="grad-r" style="left:800px;top:62px;width:425px;"></div>
@@ -1516,7 +1540,28 @@ function fitFrame(workId) {
 // preserveAspectRatio="none" её растягивало неравномерно и скруглённые
 // углы «ломались». Вызываем и при ресайзе, не только при первом рендере.
 function refitAllFrames() {
-  loadProjects().filter(p => p.hasFrame).forEach(p => fitFrame(p.id));
+  loadProjects().filter(p => p.hasFrame).forEach(p => { fitFrame(p.id); observeFrameResize(p.id); });
+}
+
+// Помимо refitAllFrames (который зависит от события resize окна),
+// следим за размером самой карточки через ResizeObserver — так рамка
+// пересчитывается сразу же при ЛЮБОМ изменении размера фото (включая
+// плавный ресайз окна перетаскиванием, где события resize идут не
+// синхронно с реальной шириной), и не отстаёт/не «отклеивается» от
+// картинки even на миг.
+let frameResizeObserver = null;
+function observeFrameResize(workId) {
+  const wrap = document.querySelector(`[data-work-id="${workId}"] .user-project__img-wrap`);
+  if (!wrap) return;
+  if (!frameResizeObserver) {
+    frameResizeObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const card = entry.target.closest('[data-work-id]');
+        if (card) fitFrame(card.dataset.workId);
+      });
+    });
+  }
+  frameResizeObserver.observe(wrap);
 }
 
 // ════════════════════════════════════════════════════════
@@ -1848,22 +1893,20 @@ function saveProject() {
 //  INIT
 // ════════════════════════════════════════════════════════
 // ── Мобильное масштабирование ────────────────────────────
-// Хиро, работы и заголовки секций масштабируются пропорционально
-// экрану (для любой ширины меньше родного канваса 1280px, включая
-// планшеты и нераспахнутые окна браузера — не только телефоны).
-// Вся визуальная идентика (фото, декоры, SVG, взаимное расположение
-// печатного и курсивного слоя в заголовках) сохраняется — контент
-// просто уменьшается через CSS zoom, порядок работ не меняется.
+// Хиро и работы масштабируются пропорционально экрану (для любой
+// ширины меньше родного канваса 1280px, включая планшеты и
+// нераспахнутые окна браузера — не только телефоны). Вся визуальная
+// идентика (фото, декоры, SVG) сохраняется — контент просто
+// уменьшается через CSS zoom, порядок работ не меняется.
+// Заголовки «РЕЗЮМЕ» / «МОИ РАБОТЫ» в этом масштабировании больше не
+// участвуют — они остаются крупными за счёт CSS clamp (см. .section-heading
+// в <style>), только боковые линии подстраиваются под ширину экрана.
 function setMobileLayout() {
   // clientWidth (not innerWidth) — совпадает с шириной, которую реально
   // получает .canvas{width:100%}, т.к. не включает полосу прокрутки
   const vw       = document.documentElement.clientWidth;
   const hdr      = document.querySelector('header');
   const figs     = document.querySelectorAll('figure.work');
-  const headings = [
-    document.querySelector('#resume-section > div:first-child'),
-    document.getElementById('works-heading'),
-  ].filter(Boolean);
 
   if (vw < 1280) {
     const s = vw / 1280; // пропорциональный масштаб
@@ -1891,11 +1934,6 @@ function setMobileLayout() {
       fig.style.left = fig.dataset.origLeft;
     });
 
-    // Заголовки «РЕЗЮМЕ» / «МОИ РАБОТЫ»: zoom всего блока целиком,
-    // поэтому курсивный и печатный слой всегда остаются в одном
-    // и том же положении друг относительно друга
-    headings.forEach(h => { h.style.zoom = s; });
-
   } else {
     // Восстанавливаем десктоп-значения (инлайн-атрибуты header
     // сохранены в HTML и вернутся после сброса JS-перезаписи)
@@ -1907,8 +1945,6 @@ function setMobileLayout() {
       fig.style.zoom = '';
       if (fig.dataset.origLeft) fig.style.left = fig.dataset.origLeft;
     });
-
-    headings.forEach(h => { h.style.zoom = ''; });
   }
 }
 
