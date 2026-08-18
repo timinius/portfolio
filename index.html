@@ -1530,12 +1530,16 @@ function fitFrame(workId) {
   const wrap = document.querySelector(`[data-work-id="${workId}"] .user-project__img-wrap`);
   const frame = document.getElementById('frame_' + workId);
   if (!wrap || !frame) return;
-  // getBoundingClientRect (не offsetWidth/Height!) — карточка может лежать
-  // внутри зумленного .user-project (мобильный масштаб), а offsetWidth
-  // zoom родителя не учитывает и всегда вернёт немасштабированный
-  // desktop-размер, из-за чего рамка на телефоне была бы посчитана неверно.
-  const rect = wrap.getBoundingClientRect();
-  const w = Math.round(rect.width), h = Math.round(rect.height);
+  // offsetWidth/Height, а не getBoundingClientRect — карточка лежит внутри
+  // зумленного .user-project (мобильный масштаб), и viewBox должен
+  // считаться в тех же немасштабированных (локальных) пикселях, в которых
+  // живёт сам SVG внутри зумленного блока: тогда обводка и скругление угла
+  // (rx) заданы в исходных desktop-пропорциях, а zoom родителя потом
+  // уменьшает рамку целиком — включая толщину обводки и скругление —
+  // вместе с фото. getBoundingClientRect вернул бы уже уменьшенный
+  // (зумленный) размер — при том же fixed rx скругление стало бы
+  // непропорционально крупным, а обводка — заметно толще, чем на десктопе.
+  const w = wrap.offsetWidth, h = wrap.offsetHeight;
   const svg = frame.querySelector('svg');
   svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
   svg.querySelector('rect').setAttribute('width',  w - 1);
